@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVC PHP Framework Documentation Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --dark: #0f172a;
+            --card-border: #e2e8f0;
+        }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #0f0b29 100%);
+            min-height: 100vh;
+            color: #f1f5f9;
+            padding: 80px 0;
+        }
+        .portal-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .header-title {
+            font-size: 3.2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #c084fc 0%, #6366f1 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .header-subtitle {
+            font-size: 1.25rem;
+            color: #94a3b8;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        .doc-card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .doc-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.15);
+            color: inherit;
+        }
+        .card-icon {
+            font-size: 2.2rem;
+            color: #a5b4fc;
+            margin-bottom: 20px;
+        }
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 12px;
+        }
+        .card-desc {
+            font-size: 0.95rem;
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+        .card-link {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #818cf8;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .doc-card:hover .card-link {
+            color: #a5b4fc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container portal-container">
+        <h1 class="header-title">MVC PHP Documentation</h1>
+        <p class="header-subtitle">Developer portal & API guides for the core PHP MVC framework</p>
+        
+        <div class="grid-container">
+            <!-- Architecture Card -->
+            <a href="core.html" class="doc-card">
+                <div>
+                    <div class="card-icon"><i class="fas fa-route"></i></div>
+                    <div class="card-title">Core Router</div>
+                    <p class="card-desc">How URL parsing works. Automatic controller/method/param resolution, default fallbacks, and the Front Controller dispatch lifecycle.</p>
+                </div>
+                <div class="card-link">Read Guide <i class="fas fa-arrow-right"></i></div>
+            </a>
+
+            <!-- Controller Class Card -->
+            <a href="controller.html" class="doc-card">
+                <div>
+                    <div class="card-icon"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-title">Controller Base Class</div>
+                    <p class="card-desc">The base class all controllers extend. Covers model() loader, view() renderer, and the built-in Blade-like template engine with directives.</p>
+                </div>
+                <div class="card-link">Read Guide <i class="fas fa-arrow-right"></i></div>
+            </a>
+
+            <!-- Environment Config Card -->
+            <a href="environment.html" class="doc-card">
+                <div>
+                    <div class="card-icon"><i class="fas fa-cog"></i></div>
+                    <div class="card-title">Environment Config</div>
+                    <p class="card-desc">Managing the .env file, env.php bootstrap loader, database credentials, APP_ENV modes, and deploying URLROOT to production.</p>
+                </div>
+                <div class="card-link">Read Guide <i class="fas fa-arrow-right"></i></div>
+            </a>
+
+            <!-- Architecture Card -->
+            <a href="architecture.html" class="doc-card">
+                <div>
+                    <div class="card-icon"><i class="fas fa-sitemap"></i></div>
+                    <div class="card-title">MVC Architecture</div>
+                    <p class="card-desc">Learn about Front Controller routing lifecycle, directory structure, controller actions, and the custom template compilation engine.</p>
+                </div>
+                <div class="card-link">Read Guide <i class="fas fa-arrow-right"></i></div>
+            </a>
+            
+            <!-- Database Card -->
+            <a href="database.html" class="doc-card">
+                <div>
+                    <div class="card-icon"><i class="fas fa-database"></i></div>
+                    <div class="card-title">PDO Database Wrapper</div>
+                    <p class="card-desc">Core Database class usage. Query preparation, secure parameter bindings, result set fetching, row counts, and database transactions.</p>
+                </div>
+                <div class="card-link">Read Guide <i class="fas fa-arrow-right"></i></div>
+            </a>
+
+            <!-- Model Card -->
+            <a href="model.html" class="doc-card">
+                <div>
+                    <div class="card-icon"><i class="fas fa-cubes"></i></div>
+                    <div class="card-title">Model Class</div>
+                    <p class="card-desc">Base Model features. Common finders, existence validators, dynamic SELECT queries, status toggles, deletion wrappers, and counter aggregates.</p>
+                </div>
+                <div class="card-link">Read Guide <i class="fas fa-arrow-right"></i></div>
+            </a>
+            
+            <!-- QueryBuilder Card -->
+            <a href="querybuilder.html" class="doc-card">
+                <div>
+                    <div class="card-icon"><i class="fas fa-project-diagram"></i></div>
+                    <div class="card-title">QueryBuilder</div>
+                    <p class="card-desc">Fluent query builder API. Build SQL queries dynamically using chained methods for where clause, selects, limits, joins, and soft deletes.</p>
+                </div>
+                <div class="card-link">Read Guide <i class="fas fa-arrow-right"></i></div>
+            </a>
+
+            <!-- QB in Practice Card -->
+            <a href="querybuilder-examples.html" class="doc-card">
+                <div>
+                    <div class="card-icon"><i class="fas fa-flask"></i></div>
+                    <div class="card-title">QueryBuilder in Practice</div>
+                    <p class="card-desc">Real-world controller walkthrough. Every QB pattern — select, count, insert, update, soft delete, whereLike, whereIn, and DataTables — demonstrated in a full Users CRUD.</p>
+                </div>
+                <div class="card-link">Read Guide <i class="fas fa-arrow-right"></i></div>
+            </a>
+            
+
+            <!-- Helpers Card -->
+            <a href="helpers.html" class="doc-card">
+                <div>
+                    <div class="card-icon"><i class="fas fa-magic"></i></div>
+                    <div class="card-title">Helper Utilities</div>
+                    <p class="card-desc">Core data validation, inputs sanitizing, profile photo uploads, directory management, status toggles, and secure AES-256 password encryption.</p>
+                </div>
+                <div class="card-link">Read Guide <i class="fas fa-arrow-right"></i></div>
+            </a>
+            
+            <!-- DataTables Card -->
+            <a href="datatables.html" class="doc-card">
+                <div>
+                    <div class="card-icon"><i class="fas fa-table"></i></div>
+                    <div class="card-title">DataTables Integration</div>
+                    <p class="card-desc">Implement server-side paginated tables with complex JOIN queries, custom search columns, order mappings, and custom column formatters.</p>
+                </div>
+                <div class="card-link">Read Guide <i class="fas fa-arrow-right"></i></div>
+            </a>
+
+            <!-- Menu Rendering Card -->
+            <a href="menu-render.html" class="doc-card">
+                <div>
+                    <div class="card-icon"><i class="fas fa-bars"></i></div>
+                    <div class="card-title">Menu Rendering</div>
+                    <p class="card-desc">Role-based sidebar navigation with Helper::renderMenuItem(). Simple links, dropdown sub-menus, multi-role visibility, and how to add new menu items.</p>
+                </div>
+                <div class="card-link">Read Guide <i class="fas fa-arrow-right"></i></div>
+            </a>
+
+            <!-- ComponentFiles Card -->
+            <a href="component-files.html" class="doc-card">
+                <div>
+                    <div class="card-icon"><i class="fas fa-puzzle-piece"></i></div>
+                    <div class="card-title">ComponentFiles</div>
+                    <p class="card-desc">Layout assembly helper providing full dashboard and minimal public layouts. Assembles header, navbar, sidebar, breadcrumb, and footer partials.</p>
+                </div>
+                <div class="card-link">Read Guide <i class="fas fa-arrow-right"></i></div>
+            </a>
+
+            <!-- SessionHelper Card -->
+            <a href="session-helper.html" class="doc-card">
+                <div>
+                    <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
+                    <div class="card-title">SessionHelper</div>
+                    <p class="card-desc">Authentication and access control. Role checking, login enforcement, requireRoles() guards, role-based redirects, and controller security patterns.</p>
+                </div>
+                <div class="card-link">Read Guide <i class="fas fa-arrow-right"></i></div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComponentFiles - Layout Assembly - Documentation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --dark-color: #1e293b;
+        }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+        }
+        .sidebar {
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            color: #cbd5e1;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow-y: auto;
+            padding: 25px 0;
+            z-index: 100;
+        }
+        .sidebar-brand {
+            padding: 0 25px 20px 25px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 20px;
+        }
+        .nav-section { margin-bottom: 20px; }
+        .nav-section-title {
+            padding: 10px 25px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #64748b;
+            font-weight: 700;
+        }
+        .nav-link {
+            color: #94a3b8;
+            padding: 8px 25px 8px 35px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            font-size: 0.88rem;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .content-area {
+            padding: 40px 50px;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .section-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        .method-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            transition: all 0.2s ease;
+        }
+        .method-card:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+        }
+        .method-name {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-family: monospace;
+            margin-bottom: 8px;
+            border-left: 4px solid var(--primary-color);
+            padding-left: 10px;
+        }
+        .method-detail {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #475569;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+        pre {
+            border-radius: 8px !important;
+            background: #0f172a !important;
+            padding: 16px !important;
+            margin-top: 15px !important;
+        }
+        code {
+            font-family: Consolas, Monaco, monospace !important;
+            font-size: 0.85rem !important;
+        }
+        .demo-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .info-box {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 16px 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+            font-size: 0.92rem;
+            color: #1e40af;
+        }
+        .warning-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 16px 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+            font-size: 0.92rem;
+            color: #92400e;
+        }
+        .success-box {
+            background: #ecfdf5;
+            border-left: 4px solid #10b981;
+            padding: 16px 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+            font-size: 0.92rem;
+            color: #065f46;
+        }
+        .file-tree {
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 20px 24px;
+            border-radius: 8px;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 0.85rem;
+            line-height: 1.8;
+        }
+        .file-tree .folder { color: #fbbf24; }
+        .file-tree .file { color: #a5b4fc; }
+        .file-tree .comment { color: #64748b; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid p-0">
+        <div class="row g-0">
+            <!-- Sidebar -->
+            <div class="col-lg-3 sidebar">
+                <div class="sidebar-brand">
+                    <i class="fas fa-cubes text-primary"></i> MVC Framework
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Navigation</div>
+                    <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Documentation Home</a>
+                    <a href="architecture.html" class="nav-link"><i class="fas fa-sitemap"></i> MVC Architecture</a>
+                    <a href="core.html" class="nav-link"><i class="fas fa-route"></i> Core Router</a>
+                    <a href="controller.html" class="nav-link"><i class="fas fa-gamepad"></i> Controller Class</a>
+                    <a href="environment.html" class="nav-link"><i class="fas fa-cog"></i> Environment Config</a>
+                    <a href="database.html" class="nav-link"><i class="fas fa-database"></i> Database class</a>
+                    <a href="model.html" class="nav-link"><i class="fas fa-layer-group"></i> Model class</a>
+                    <a href="querybuilder.html" class="nav-link"><i class="fas fa-project-diagram"></i> QueryBuilder</a>
+                    <a href="helpers.html" class="nav-link"><i class="fas fa-magic"></i> Helper Utilities</a>
+                    <a href="datatables.html" class="nav-link"><i class="fas fa-table"></i> DataTables</a>
+                    <a href="menu-render.html" class="nav-link"><i class="fas fa-bars"></i> Menu Rendering</a>
+                    <a href="component-files.html" class="nav-link active"><i class="fas fa-puzzle-piece"></i> ComponentFiles</a>
+                    <a href="session-helper.html" class="nav-link"><i class="fas fa-shield-alt"></i> SessionHelper</a>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-lg-9 content-area">
+                <h1 class="section-title">ComponentFiles — Layout Assembly Helper</h1>
+                <p>The <code>ComponentFiles</code> class (located at <code>app/helpers/ComponentFiles.php</code>) is a static helper that assembles the common layout partials (header, navbar, sidebar, breadcrumb, footer) into your views. It provides two layout modes: the <strong>full authenticated layout</strong> and a <strong>minimal public layout</strong>.</p>
+
+                <!-- SECTION 1: OVERVIEW -->
+                <h2 class="section-title mt-5"><i class="fas fa-layer-group"></i> 1. Layout Architecture</h2>
+
+                <div class="method-card">
+                    <div class="method-name">File Locations</div>
+                    <div class="method-detail">All layout partials live in the <code>app/views/inc/</code> directory:</div>
+                    <div class="file-tree">
+                        <span class="folder">app/views/inc/</span><br>
+                        ├── <span class="file">header.php</span> <span class="comment">── HTML &lt;head&gt;, CSS imports, meta tags</span><br>
+                        ├── <span class="file">navbar.php</span> <span class="comment">── Top navigation bar</span><br>
+                        ├── <span class="file">aside.php</span> <span class="comment">── Left sidebar menu (role-based)</span><br>
+                        ├── <span class="file">breadcrumb.php</span> <span class="comment">── Breadcrumb navigation trail</span><br>
+                        ├── <span class="file">copyright.php</span> <span class="comment">── Copyright footer text</span><br>
+                        ├── <span class="file">footer.php</span> <span class="comment">── Closing tags, JS scripts</span><br>
+                        ├── <span class="file">_header.php</span> <span class="comment">── Minimal public HTML &lt;head&gt;</span><br>
+                        └── <span class="file">_footer.php</span> <span class="comment">── Minimal public closing tags</span>
+                    </div>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Two Layout Modes</div>
+                    <div class="method-detail">
+                        The class provides two pairs of methods — one for the <strong>authenticated dashboard</strong> layout (with sidebar + navbar) and one for <strong>public/minimal</strong> pages (login, error pages, etc.).
+                    </div>
+                    <table class="table table-bordered" style="font-size: 0.9rem;">
+                        <thead style="background: #f1f5f9;">
+                            <tr><th>Layout</th><th>Header Method</th><th>Footer Method</th><th>Use Case</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Full (Dashboard)</strong></td>
+                                <td><code>ComponentFiles::header()</code></td>
+                                <td><code>ComponentFiles::footer()</code></td>
+                                <td>All authenticated pages with sidebar, navbar, breadcrumb</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Minimal (Public)</strong></td>
+                                <td><code>ComponentFiles::_header()</code></td>
+                                <td><code>ComponentFiles::_footer()</code></td>
+                                <td>Login, registration, password reset, error pages</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- SECTION 2: FULL LAYOUT METHODS -->
+                <h2 class="section-title mt-5"><i class="fas fa-columns"></i> 2. Full Dashboard Layout</h2>
+
+                <div class="method-card">
+                    <div class="method-name">ComponentFiles::header()</div>
+                    <div class="method-detail">
+                        Loads the four partials that form the top portion of every authenticated page. Must be called at the <strong>very beginning</strong> of every view file.
+                    </div>
+                    <div class="demo-title">What it loads (in order)</div>
+<pre><code class="language-php">public static function header()
+{
+    require_once '../app/views/inc/header.php';      // &lt;html&gt;, &lt;head&gt;, CSS
+    require_once '../app/views/inc/navbar.php';      // Top navbar
+    require_once '../app/views/inc/aside.php';       // Left sidebar menu
+    require_once '../app/views/inc/breadcrumb.php';  // Breadcrumb trail
+}</code></pre>
+                    <div class="info-box">
+                        <i class="fas fa-info-circle"></i> <strong>Note:</strong> The <code>aside.php</code> partial uses <code>Helper::renderMenuItem()</code> to render menu items based on the current user's role. See the <a href="menu-render.html">Menu Rendering</a> docs for details.
+                    </div>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">ComponentFiles::footer()</div>
+                    <div class="method-detail">
+                        Loads the bottom partials that close the page. Must be called at the <strong>very end</strong> of every view file.
+                    </div>
+                    <div class="demo-title">What it loads (in order)</div>
+<pre><code class="language-php">public static function footer()
+{
+    require_once '../app/views/inc/copyright.php';  // Copyright bar
+    require_once '../app/views/inc/footer.php';     // Closing &lt;/body&gt;, JS scripts
+}</code></pre>
+                </div>
+
+                <!-- SECTION 3: MINIMAL LAYOUT -->
+                <h2 class="section-title mt-5"><i class="fas fa-file-alt"></i> 3. Minimal Public Layout</h2>
+
+                <div class="method-card">
+                    <div class="method-name">ComponentFiles::_header()</div>
+                    <div class="method-detail">
+                        Loads a stripped-down HTML <code>&lt;head&gt;</code> with no navbar or sidebar. Used for pages where the user is <strong>not authenticated</strong> (login, register, error pages).
+                    </div>
+<pre><code class="language-php">public static function _header()
+{
+    require_once '../app/views/inc/_header.php';  // Minimal &lt;html&gt;, &lt;head&gt;
+}</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">ComponentFiles::_footer()</div>
+                    <div class="method-detail">
+                        Closes the minimal layout page. No copyright section or dashboard JavaScript.
+                    </div>
+<pre><code class="language-php">public static function _footer()
+{
+    require_once '../app/views/inc/_footer.php';  // Minimal closing tags
+}</code></pre>
+                </div>
+
+                <!-- SECTION 4: USAGE IN VIEWS -->
+                <h2 class="section-title mt-5"><i class="fas fa-flask"></i> 4. Usage in View Files</h2>
+
+                <div class="method-card">
+                    <div class="method-name">Example 1: Authenticated Dashboard View</div>
+                    <div class="method-detail">
+                        The standard pattern for any page inside the dashboard. Your content goes between <code>header()</code> and <code>footer()</code>.
+                    </div>
+                    <div class="demo-title">File: app/views/partnersproducts/index.php</div>
+<pre><code class="language-php">&lt;?php ComponentFiles::header(); ?&gt;
+
+&lt;!-- ===== Your page content starts here ===== --&gt;
+&lt;div class="page-content"&gt;
+    &lt;div class="container-fluid"&gt;
+        
+        &lt;h4 class="mb-3"&gt;Partner Products&lt;/h4&gt;
+
+        &lt;?php Helper::showFlash('partner_product_message'); ?&gt;
+
+        &lt;div class="card"&gt;
+            &lt;div class="card-body"&gt;
+                &lt;table id="datatable" class="table"&gt;
+                    &lt;!-- table content --&gt;
+                &lt;/table&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- ===== Your page content ends here ===== --&gt;
+
+&lt;?php ComponentFiles::footer(); ?&gt;</code></pre>
+
+                    <div class="success-box">
+                        <i class="fas fa-check-circle"></i> <strong>Result:</strong> The page will render with the full top navbar, left sidebar with role-based menu items, breadcrumb trail, your content area, and the copyright + JS footer.
+                    </div>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Example 2: Public / Login Page View</div>
+                    <div class="method-detail">
+                        Login and registration pages use the minimal layout — no sidebar, no navbar, just the bare HTML shell.
+                    </div>
+                    <div class="demo-title">File: app/views/logins/index.php</div>
+<pre><code class="language-php">&lt;?php ComponentFiles::_header(); ?&gt;
+
+&lt;!-- ===== Login form content ===== --&gt;
+&lt;div class="account-pages my-5 pt-5"&gt;
+    &lt;div class="container"&gt;
+        &lt;div class="row justify-content-center"&gt;
+            &lt;div class="col-md-8 col-lg-6"&gt;
+                &lt;div class="card"&gt;
+                    &lt;div class="card-body p-4"&gt;
+                        &lt;h4 class="text-center mb-4"&gt;Sign In&lt;/h4&gt;
+                        &lt;form action="&lt;?= URLROOT ?&gt;/logins/login" method="POST"&gt;
+                            &lt;!-- login fields --&gt;
+                        &lt;/form&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;?php ComponentFiles::_footer(); ?&gt;</code></pre>
+                </div>
+
+                <!-- SECTION 5: CHOOSING THE RIGHT LAYOUT -->
+                <h2 class="section-title mt-5"><i class="fas fa-question-circle"></i> 5. Which Layout to Use?</h2>
+
+                <div class="method-card">
+                    <div class="method-detail">Use this quick decision guide:</div>
+                    <table class="table table-bordered" style="font-size: 0.9rem;">
+                        <thead style="background: #f1f5f9;">
+                            <tr><th>Scenario</th><th>Header</th><th>Footer</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Dashboard pages (bookings, products, settings, users…)</td>
+                                <td><code>ComponentFiles::header()</code></td>
+                                <td><code>ComponentFiles::footer()</code></td>
+                            </tr>
+                            <tr>
+                                <td>Login / Registration / Password reset</td>
+                                <td><code>ComponentFiles::_header()</code></td>
+                                <td><code>ComponentFiles::_footer()</code></td>
+                            </tr>
+                            <tr>
+                                <td>Error pages (404, 403, 500)</td>
+                                <td><code>ComponentFiles::_header()</code></td>
+                                <td><code>ComponentFiles::_footer()</code></td>
+                            </tr>
+                            <tr>
+                                <td>Print-friendly / PDF export views</td>
+                                <td><code>ComponentFiles::_header()</code></td>
+                                <td><code>ComponentFiles::_footer()</code></td>
+                            </tr>
+                            <tr>
+                                <td>AJAX partial responses (JSON / HTML fragments)</td>
+                                <td colspan="2" style="text-align:center;">Neither — return raw output</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="warning-box">
+                        <i class="fas fa-exclamation-triangle"></i> <strong>Never mix layouts.</strong> Using <code>ComponentFiles::header()</code> with <code>ComponentFiles::_footer()</code> (or vice-versa) will result in broken HTML with unclosed tags or missing JavaScript.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-php.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+</body>
+</html>

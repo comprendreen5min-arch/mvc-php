@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Rendering & Sidebar Navigation - Documentation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --dark-color: #1e293b;
+        }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+        }
+        .sidebar {
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            color: #cbd5e1;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow-y: auto;
+            padding: 25px 0;
+            z-index: 100;
+        }
+        .sidebar-brand {
+            padding: 0 25px 20px 25px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 20px;
+        }
+        .nav-section { margin-bottom: 20px; }
+        .nav-section-title {
+            padding: 10px 25px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #64748b;
+            font-weight: 700;
+        }
+        .nav-link {
+            color: #94a3b8;
+            padding: 8px 25px 8px 35px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            font-size: 0.88rem;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .content-area {
+            padding: 40px 50px;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .section-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        .method-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            transition: all 0.2s ease;
+        }
+        .method-card:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+        }
+        .method-name {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-family: monospace;
+            margin-bottom: 8px;
+            border-left: 4px solid var(--primary-color);
+            padding-left: 10px;
+        }
+        .method-detail {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #475569;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+        pre {
+            border-radius: 8px !important;
+            background: #0f172a !important;
+            padding: 16px !important;
+            margin-top: 15px !important;
+        }
+        code {
+            font-family: Consolas, Monaco, monospace !important;
+            font-size: 0.85rem !important;
+        }
+        .demo-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .role-badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 9999px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            margin: 2px 3px;
+        }
+        .role-1 { background: #fee2e2; color: #991b1b; }
+        .role-2 { background: #fef3c7; color: #92400e; }
+        .role-3 { background: #d1fae5; color: #065f46; }
+        .role-4 { background: #dbeafe; color: #1e40af; }
+        .role-5 { background: #ede9fe; color: #5b21b6; }
+        .role-6 { background: #fce7f3; color: #9d174d; }
+        .role-7 { background: #cffafe; color: #155e75; }
+        .role-8 { background: #f5f5f4; color: #44403c; }
+        .info-box {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 16px 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+            font-size: 0.92rem;
+            color: #1e40af;
+        }
+        .warning-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 16px 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+            font-size: 0.92rem;
+            color: #92400e;
+        }
+        .param-table {
+            width: 100%;
+            font-size: 0.9rem;
+        }
+        .param-table th {
+            background: #f1f5f9;
+            font-weight: 700;
+            padding: 10px 14px;
+        }
+        .param-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: top;
+        }
+        .param-table code {
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.82rem !important;
+            color: #6366f1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid p-0">
+        <div class="row g-0">
+            <!-- Sidebar -->
+            <div class="col-lg-3 sidebar">
+                <div class="sidebar-brand">
+                    <i class="fas fa-cubes text-primary"></i> MVC Framework
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Navigation</div>
+                    <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Documentation Home</a>
+                    <a href="architecture.html" class="nav-link"><i class="fas fa-sitemap"></i> MVC Architecture</a>
+                    <a href="core.html" class="nav-link"><i class="fas fa-route"></i> Core Router</a>
+                    <a href="controller.html" class="nav-link"><i class="fas fa-gamepad"></i> Controller Class</a>
+                    <a href="environment.html" class="nav-link"><i class="fas fa-cog"></i> Environment Config</a>
+                    <a href="database.html" class="nav-link"><i class="fas fa-database"></i> Database class</a>
+                    <a href="model.html" class="nav-link"><i class="fas fa-layer-group"></i> Model class</a>
+                    <a href="querybuilder.html" class="nav-link"><i class="fas fa-project-diagram"></i> QueryBuilder</a>
+                    <a href="helpers.html" class="nav-link"><i class="fas fa-magic"></i> Helper Utilities</a>
+                    <a href="datatables.html" class="nav-link"><i class="fas fa-table"></i> DataTables</a>
+                    <a href="menu-render.html" class="nav-link active"><i class="fas fa-bars"></i> Menu Rendering</a>
+                    <a href="component-files.html" class="nav-link"><i class="fas fa-puzzle-piece"></i> ComponentFiles</a>
+                    <a href="session-helper.html" class="nav-link"><i class="fas fa-shield-alt"></i> SessionHelper</a>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-lg-9 content-area">
+                <h1 class="section-title">Menu Rendering & Sidebar Navigation</h1>
+                <p>Complete guide to the role-based sidebar navigation system. The menu is rendered inside <code>app/views/inc/aside.php</code> using the static method <code>Helper::renderMenuItem()</code> defined in <code>app/libraries/Helper.php</code>.</p>
+
+                <!-- SECTION 1: HOW IT WORKS -->
+                <h2 class="section-title mt-5"><i class="fas fa-cogs"></i> 1. How the Menu System Works</h2>
+
+                <div class="method-card">
+                    <div class="method-detail">
+                        The sidebar lives in <code>app/views/inc/aside.php</code> and is automatically loaded by <code>ComponentFiles::header()</code> on every page. Each menu item is rendered using <code>Helper::renderMenuItem()</code>, which checks the current user's <code>$_SESSION['user_role']</code> against an array of allowed role IDs. If the user's role is not in the list, the menu item is <strong>silently hidden</strong> — no errors, no redirects, just an empty string.
+                    </div>
+                    <div class="info-box">
+                        <i class="fas fa-info-circle"></i> <strong>Key Concept:</strong> The sidebar only controls <em>visibility</em>. It hides links from users who shouldn't see them, but it does <strong>not</strong> enforce access control. You must also use <code>SessionHelper::requireRoles()</code> in your controller constructor to block unauthorized access at the backend level.
+                    </div>
+                </div>
+
+                <!-- SECTION 2: ROLE MAP -->
+                <h2 class="section-title mt-5"><i class="fas fa-users-cog"></i> 2. Role ID Reference</h2>
+
+                <div class="method-card">
+                    <div class="method-detail">Every user in the system has a <code>user_role</code> stored in the session. The following IDs are used throughout the menu and access control layers:</div>
+                    <table class="param-table">
+                        <thead>
+                            <tr><th>Role ID</th><th>Name</th><th>Description</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><span class="role-badge role-1">1</span></td><td>Admin</td><td>Full system access. Can manage all users, products, settings.</td></tr>
+                            <tr><td><span class="role-badge role-2">2</span></td><td>Manager</td><td>Operational access similar to Admin with restricted settings.</td></tr>
+                            <tr><td><span class="role-badge role-3">3</span></td><td>Partner</td><td>Agency owners — manage bookings, customers, invoices.</td></tr>
+                            <tr><td><span class="role-badge role-4">4</span></td><td>Transporter</td><td>Transportation providers — manage vehicles, drivers, bookings.</td></tr>
+                            <tr><td><span class="role-badge role-5">5</span></td><td>Driver</td><td>Individual drivers assigned to transporters.</td></tr>
+                            <tr><td><span class="role-badge role-6">6</span></td><td>Pilot</td><td>Balloon pilots managing flight operations.</td></tr>
+                            <tr><td><span class="role-badge role-7">7</span></td><td>Accounter</td><td>Financial staff handling accounting and invoices.</td></tr>
+                            <tr><td><span class="role-badge role-8">8</span></td><td>Greeter</td><td>Front-line staff greeting and checking in guests.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- SECTION 3: METHOD SIGNATURE -->
+                <h2 class="section-title mt-5"><i class="fas fa-code"></i> 3. renderMenuItem() Method</h2>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::renderMenuItem($title, $icon, $url, $subItems, $allowedRoles)</div>
+                    <div class="method-detail">
+                        Generates a sidebar <code>&lt;li&gt;</code> menu item with optional sub-menu dropdown. The item is only rendered if the current user's role is included in <code>$allowedRoles</code>. If <code>$allowedRoles</code> is empty, the item is visible to everyone.
+                    </div>
+
+                    <div class="demo-title">Parameters</div>
+                    <table class="param-table">
+                        <thead>
+                            <tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>$title</code></td>
+                                <td><code>string</code></td>
+                                <td>—</td>
+                                <td>The visible label of the menu item (e.g. <code>'Products'</code>).</td>
+                            </tr>
+                            <tr>
+                                <td><code>$icon</code></td>
+                                <td><code>string</code></td>
+                                <td>—</td>
+                                <td>CSS icon class from Font Awesome or Themify. Example: <code>'fas fa-box'</code>, <code>'ti-home'</code>.</td>
+                            </tr>
+                            <tr>
+                                <td><code>$url</code></td>
+                                <td><code>string</code></td>
+                                <td><code>'javascript:void(0);'</code></td>
+                                <td>The link target. Use <code>URLROOT . '/controller/method'</code> for direct links, or <code>'javascript:void(0);'</code> for parent items with sub-menus.</td>
+                            </tr>
+                            <tr>
+                                <td><code>$subItems</code></td>
+                                <td><code>array</code></td>
+                                <td><code>[]</code></td>
+                                <td>An array of associative arrays, each with <code>'title'</code> and <code>'url'</code> keys. Creates a collapsible dropdown.</td>
+                            </tr>
+                            <tr>
+                                <td><code>$allowedRoles</code></td>
+                                <td><code>array</code></td>
+                                <td><code>[]</code></td>
+                                <td>Array of role IDs that can see this item. Empty <code>[]</code> means visible to all roles.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="demo-title">Return Value</div>
+                    <div class="method-detail">
+                        Returns an HTML <code>string</code>. If the user's role is not in <code>$allowedRoles</code>, returns an empty string <code>''</code>.
+                    </div>
+                </div>
+
+                <!-- SECTION 4: EXAMPLES -->
+                <h2 class="section-title mt-5"><i class="fas fa-flask"></i> 4. Usage Examples</h2>
+
+                <!-- Example 1: Simple link -->
+                <div class="method-card">
+                    <div class="method-name">Example 1: Simple Link (No Sub-Menu)</div>
+                    <div class="method-detail">
+                        A single direct link visible only to <strong>Partners (role 3)</strong>. Clicking it navigates directly to the bookings page.
+                    </div>
+                    <div class="demo-title">Code</div>
+<pre><code class="language-php">// Simple link — visible only to Partners (role 3)
+print Helper::renderMenuItem(
+    'Bookings',                              // Title
+    'fas fa-calendar',                       // Icon
+    URLROOT . '/partner_bookings/index',     // Direct URL
+    [],                                      // No sub-items
+    [3]                                      // Allowed roles: Partner only
+);</code></pre>
+                    <div class="demo-title">Generated HTML</div>
+<pre><code class="language-html">&lt;li&gt;
+    &lt;a href="http://localhost/mvc-php/partner_bookings/index" class="waves-effect"&gt;
+        &lt;i class="fas fa-calendar"&gt;&lt;/i&gt;
+        &lt;span&gt;Bookings&lt;/span&gt;
+    &lt;/a&gt;
+&lt;/li&gt;</code></pre>
+                </div>
+
+                <!-- Example 2: With sub-menu -->
+                <div class="method-card">
+                    <div class="method-name">Example 2: Dropdown with Sub-Items</div>
+                    <div class="method-detail">
+                        A parent item with a collapsible dropdown containing child links. The parent <code>$url</code> is set to <code>javascript:void(0);</code> so clicking it only toggles the dropdown. Visible only to <strong>Admins (role 1)</strong>.
+                    </div>
+                    <div class="demo-title">Code</div>
+<pre><code class="language-php">// Dropdown menu — Admin (role 1) only
+print Helper::renderMenuItem(
+    'Products',                     // Parent title
+    'ti-package',                   // Parent icon
+    'javascript:void(0);',         // No direct navigation
+    [                               // Sub-items array
+        ['title' => 'Add Product',    'url' => URLROOT . '/products/new'],
+        ['title' => 'Products List',  'url' => URLROOT . '/products/index']
+    ],
+    [1]                             // Allowed roles: Admin only
+);</code></pre>
+                    <div class="demo-title">Generated HTML</div>
+<pre><code class="language-html">&lt;li&gt;
+    &lt;a href="javascript:void(0);" class="has-arrow waves-effect" aria-expanded="false"&gt;
+        &lt;i class="ti-package"&gt;&lt;/i&gt;
+        &lt;span&gt;Products&lt;/span&gt;
+    &lt;/a&gt;
+    &lt;ul class="sub-menu mm-collapse" aria-expanded="false"&gt;
+        &lt;li&gt;&lt;a href="http://localhost/mvc-php/products/new"&gt;Add Product&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="http://localhost/mvc-php/products/index"&gt;Products List&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/li&gt;</code></pre>
+                </div>
+
+                <!-- Example 3: Multiple roles -->
+                <div class="method-card">
+                    <div class="method-name">Example 3: Multiple Roles</div>
+                    <div class="method-detail">
+                        A menu item visible to <strong>both Admins and Managers</strong> (roles 1, 2). Simply pass multiple IDs in the <code>$allowedRoles</code> array.
+                    </div>
+                    <div class="demo-title">Code</div>
+<pre><code class="language-php">// Visible to Admin (1) AND Manager (2)
+print Helper::renderMenuItem(
+    'Home',
+    'ti-home',
+    URLROOT . '/pages/index',
+    [],
+    [1, 2]
+);</code></pre>
+                </div>
+
+                <!-- Example 4: Visible to everyone -->
+                <div class="method-card">
+                    <div class="method-name">Example 4: Visible to All Roles</div>
+                    <div class="method-detail">
+                        To make a menu item visible to <strong>every role</strong>, list all role IDs in the array. There is no wildcard — you must include each role ID explicitly.
+                    </div>
+                    <div class="demo-title">Code</div>
+<pre><code class="language-php">// Support link — visible to ALL roles
+print Helper::renderMenuItem(
+    'Support',
+    'fa fa-video',
+    'javascript:void(0);',
+    [
+        ['title' => 'Documentation', 'url' => URLROOT . '/public/doc/index']
+    ],
+    [1, 2, 3, 4, 5, 6, 7, 8]   // All roles
+);</code></pre>
+                </div>
+
+                <!-- Example 5: Role-specific home pages -->
+                <div class="method-card">
+                    <div class="method-name">Example 5: Role-Specific Home Pages</div>
+                    <div class="method-detail">
+                        Each role sees a different "Home" link pointing to their dashboard. The menu renders only the one that matches the logged-in user's role.
+                    </div>
+                    <div class="demo-title">Code</div>
+<pre><code class="language-php">// Each role has its own home page:
+print Helper::renderMenuItem('Home', 'ti-home', URLROOT . '/pages/index',       [], [1, 2]);  // Admin & Manager
+print Helper::renderMenuItem('Home', 'ti-home', URLROOT . '/partners/index',    [], [3]);     // Partner
+print Helper::renderMenuItem('Home', 'ti-home', URLROOT . '/transporter/index', [], [4]);     // Transporter
+print Helper::renderMenuItem('Home', 'ti-home', URLROOT . '/drivers/index',     [], [5]);     // Driver
+print Helper::renderMenuItem('Home', 'ti-home', URLROOT . '/pilots/index',      [], [6]);     // Pilot
+print Helper::renderMenuItem('Home', 'ti-home', URLROOT . '/accounter/index',   [], [7]);     // Accounter
+print Helper::renderMenuItem('Home', 'ti-home', URLROOT . '/greeter/index',     [], [8]);     // Greeter
+
+// Only ONE "Home" link appears in the sidebar per user.</code></pre>
+                </div>
+
+                <!-- SECTION 5: ADDING A NEW MENU ITEM -->
+                <h2 class="section-title mt-5"><i class="fas fa-plus-circle"></i> 5. How to Add a New Menu Item</h2>
+
+                <div class="method-card">
+                    <div class="method-name">Step-by-Step Guide</div>
+                    <div class="method-detail">
+                        Follow these steps to add a new menu entry to the sidebar:
+                    </div>
+
+                    <div class="demo-title">Step 1 — Open the aside file</div>
+<pre><code class="language-text">app/views/inc/aside.php</code></pre>
+
+                    <div class="demo-title">Step 2 — Add your renderMenuItem call</div>
+                    <div class="method-detail">Place it inside the <code>&lt;?php ... ?&gt;</code> block, in the section for the appropriate role group.</div>
+<pre><code class="language-php">// --- Example: Adding a "Reports" menu for Admins and Managers ---
+
+// Simple link (no dropdown)
+print Helper::renderMenuItem(
+    'Reports',
+    'fas fa-chart-bar',
+    URLROOT . '/reports/index',
+    [],
+    [1, 2]
+);
+
+// OR with sub-menu dropdown
+print Helper::renderMenuItem(
+    'Reports',
+    'fas fa-chart-bar',
+    'javascript:void(0);',
+    [
+        ['title' => 'Daily Report',   'url' => URLROOT . '/reports/daily'],
+        ['title' => 'Monthly Report', 'url' => URLROOT . '/reports/monthly'],
+        ['title' => 'Export CSV',      'url' => URLROOT . '/reports/export'],
+    ],
+    [1, 2]
+);</code></pre>
+
+                    <div class="demo-title">Step 3 — Protect the controller</div>
+                    <div class="method-detail">
+                        Always pair menu visibility with backend access control in your controller:
+                    </div>
+<pre><code class="language-php">class Reports extends Controller
+{
+    public function __construct()
+    {
+        $this->session = new SessionHelper();
+        // Only Admins (1) and Managers (2) can access
+        $this->session->requireRoles([1, 2], 'errors/error');
+    }
+}</code></pre>
+
+                    <div class="warning-box">
+                        <i class="fas fa-exclamation-triangle"></i> <strong>Important:</strong> Hiding a menu item does <em>not</em> prevent direct URL access. Always use <code>SessionHelper::requireRoles()</code> in the controller to enforce permissions server-side.
+                    </div>
+                </div>
+
+                <!-- SECTION 6: INTERNAL LOGIC -->
+                <h2 class="section-title mt-5"><i class="fas fa-microchip"></i> 6. Internal Logic Flow</h2>
+
+                <div class="method-card">
+                    <div class="method-name">How renderMenuItem() Works Internally</div>
+                    <div class="method-detail">
+                        Here is the step-by-step decision flow inside the method:
+                    </div>
+<pre><code class="language-text">1. Check $allowedRoles
+   ├── If NOT empty → compare $_SESSION['user_role'] against the array
+   │   ├── Role NOT found → return '' (item hidden)
+   │   └── Role found → proceed to render
+   └── If empty → proceed to render (visible to all)
+
+2. Check $subItems
+   ├── If NOT empty → add 'has-arrow' CSS class to the &lt;a&gt; tag
+   │   └── Generate &lt;ul class="sub-menu"&gt; with child &lt;li&gt; items
+   └── If empty → render as a simple direct link
+
+3. Return the complete HTML string</code></pre>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-php.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+</body>
+</html>

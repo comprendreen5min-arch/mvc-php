@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SessionHelper - Authentication & Access Control - Documentation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --dark-color: #1e293b;
+        }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+        }
+        .sidebar {
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            color: #cbd5e1;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow-y: auto;
+            padding: 25px 0;
+            z-index: 100;
+        }
+        .sidebar-brand {
+            padding: 0 25px 20px 25px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 20px;
+        }
+        .nav-section { margin-bottom: 20px; }
+        .nav-section-title {
+            padding: 10px 25px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #64748b;
+            font-weight: 700;
+        }
+        .nav-link {
+            color: #94a3b8;
+            padding: 8px 25px 8px 35px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            font-size: 0.88rem;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .content-area {
+            padding: 40px 50px;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .section-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        .method-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            transition: all 0.2s ease;
+        }
+        .method-card:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+        }
+        .method-name {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-family: monospace;
+            margin-bottom: 8px;
+            border-left: 4px solid var(--primary-color);
+            padding-left: 10px;
+        }
+        .method-detail {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #475569;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+        pre {
+            border-radius: 8px !important;
+            background: #0f172a !important;
+            padding: 16px !important;
+            margin-top: 15px !important;
+        }
+        code {
+            font-family: Consolas, Monaco, monospace !important;
+            font-size: 0.85rem !important;
+        }
+        .demo-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .info-box {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 16px 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+            font-size: 0.92rem;
+            color: #1e40af;
+        }
+        .warning-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 16px 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+            font-size: 0.92rem;
+            color: #92400e;
+        }
+        .danger-box {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+            padding: 16px 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+            font-size: 0.92rem;
+            color: #991b1b;
+        }
+        .success-box {
+            background: #ecfdf5;
+            border-left: 4px solid #10b981;
+            padding: 16px 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+            font-size: 0.92rem;
+            color: #065f46;
+        }
+        .role-badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 9999px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            margin: 2px 3px;
+        }
+        .role-1 { background: #fee2e2; color: #991b1b; }
+        .role-2 { background: #fef3c7; color: #92400e; }
+        .role-3 { background: #d1fae5; color: #065f46; }
+        .role-4 { background: #dbeafe; color: #1e40af; }
+        .role-5 { background: #ede9fe; color: #5b21b6; }
+        .role-6 { background: #fce7f3; color: #9d174d; }
+        .role-7 { background: #cffafe; color: #155e75; }
+        .role-8 { background: #f5f5f4; color: #44403c; }
+        .param-table {
+            width: 100%;
+            font-size: 0.9rem;
+        }
+        .param-table th {
+            background: #f1f5f9;
+            font-weight: 700;
+            padding: 10px 14px;
+        }
+        .param-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: top;
+        }
+        .param-table code {
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.82rem !important;
+            color: #6366f1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid p-0">
+        <div class="row g-0">
+            <!-- Sidebar -->
+            <div class="col-lg-3 sidebar">
+                <div class="sidebar-brand">
+                    <i class="fas fa-cubes text-primary"></i> MVC Framework
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Navigation</div>
+                    <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Documentation Home</a>
+                    <a href="architecture.html" class="nav-link"><i class="fas fa-sitemap"></i> MVC Architecture</a>
+                    <a href="core.html" class="nav-link"><i class="fas fa-route"></i> Core Router</a>
+                    <a href="controller.html" class="nav-link"><i class="fas fa-gamepad"></i> Controller Class</a>
+                    <a href="environment.html" class="nav-link"><i class="fas fa-cog"></i> Environment Config</a>
+                    <a href="database.html" class="nav-link"><i class="fas fa-database"></i> Database class</a>
+                    <a href="model.html" class="nav-link"><i class="fas fa-layer-group"></i> Model class</a>
+                    <a href="querybuilder.html" class="nav-link"><i class="fas fa-project-diagram"></i> QueryBuilder</a>
+                    <a href="helpers.html" class="nav-link"><i class="fas fa-magic"></i> Helper Utilities</a>
+                    <a href="datatables.html" class="nav-link"><i class="fas fa-table"></i> DataTables</a>
+                    <a href="menu-render.html" class="nav-link"><i class="fas fa-bars"></i> Menu Rendering</a>
+                    <a href="component-files.html" class="nav-link"><i class="fas fa-puzzle-piece"></i> ComponentFiles</a>
+                    <a href="session-helper.html" class="nav-link active"><i class="fas fa-shield-alt"></i> SessionHelper</a>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-lg-9 content-area">
+                <h1 class="section-title">SessionHelper — Authentication & Access Control</h1>
+                <p>The <code>SessionHelper</code> class (located at <code>app/helpers/SessionHelper.php</code>) manages user sessions, role checks, and access control enforcement. Use it in every controller constructor to <strong>protect pages</strong> from unauthorized access.</p>
+
+                <div class="danger-box">
+                    <i class="fas fa-exclamation-circle"></i> <strong>Critical Rule:</strong> Hiding a sidebar menu item does NOT prevent access. You <strong>must</strong> call <code>$this->session->requireRoles()</code> in your controller constructor to enforce permissions at the backend level.
+                </div>
+
+                <!-- SECTION 1: SETUP -->
+                <h2 class="section-title mt-5"><i class="fas fa-plug"></i> 1. Setting Up in a Controller</h2>
+
+                <div class="method-card">
+                    <div class="method-name">Standard Controller Setup Pattern</div>
+                    <div class="method-detail">
+                        Every protected controller follows the same pattern: instantiate <code>SessionHelper</code>, call a role guard, then store user info for later use.
+                    </div>
+                    <div class="demo-title">Complete Example</div>
+<pre><code class="language-php">class PartnersProducts extends Controller
+{
+    private $mod;
+    private $help;
+    private $session;
+    private $adminId;
+    private $adminName;
+
+    public function __construct()
+    {
+        // Load model and helpers
+        $this->mod = $this->model('PartnersProduct');
+        $this->help = new Helper();
+
+        // Initialize SessionHelper
+        $this->session = new SessionHelper();
+
+        // ✅ ENFORCE ACCESS CONTROL — Only Admins (role 1) allowed
+        $this->session->requireRoles([1], 'errors/error');
+
+        // Store user info for audit trails
+        $this->adminId   = $this->session->getUserId();
+        $this->adminName = $this->session->getUserName();
+    }
+}</code></pre>
+                    <div class="info-box">
+                        <i class="fas fa-info-circle"></i> The <code>requireRoles()</code> call must be in the <strong>constructor</strong>. It runs before any method, so every action in this controller is automatically protected.
+                    </div>
+                </div>
+
+                <!-- SECTION 2: SESSION DATA GETTERS -->
+                <h2 class="section-title mt-5"><i class="fas fa-user-circle"></i> 2. Session Data Getters</h2>
+
+                <div class="method-card">
+                    <div class="method-name">isLoggedIn()</div>
+                    <div class="method-detail">Returns <code>true</code> if a user session exists (i.e. <code>$_SESSION['user_id']</code> is set and non-empty).</div>
+<pre><code class="language-php">$session = new SessionHelper();
+
+if ($session->isLoggedIn()) {
+    echo "User is authenticated";
+} else {
+    echo "Not logged in";
+}</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">getUserId()</div>
+                    <div class="method-detail">Returns the current user's <code>id</code> from the session, or <code>null</code> if not logged in.</div>
+<pre><code class="language-php">$userId = $session->getUserId();   // e.g. 42</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">getUserRole()</div>
+                    <div class="method-detail">Returns the current user's <code>role ID</code> (integer) from the session, or <code>null</code>.</div>
+<pre><code class="language-php">$roleId = $session->getUserRole();  // e.g. 1 (Admin), 3 (Partner)</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">getUserEmail()</div>
+                    <div class="method-detail">Returns the current user's email address from the session, or <code>null</code>.</div>
+<pre><code class="language-php">$email = $session->getUserEmail();  // e.g. "admin@company.com"</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">getUserName()</div>
+                    <div class="method-detail">Returns the user's full name by concatenating <code>$_SESSION['first_name']</code> and <code>$_SESSION['last_name']</code>.</div>
+<pre><code class="language-php">$fullName = $session->getUserName();  // e.g. "John Doe"</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">getRoleName($roleId = null)</div>
+                    <div class="method-detail">Converts a numeric role ID to its human-readable name. Defaults to the current user's role if no parameter is passed.</div>
+<pre><code class="language-php">// Current user's role name
+echo $session->getRoleName();       // "Admin"
+
+// Specific role ID
+echo $session->getRoleName(3);      // "Partner"
+echo $session->getRoleName(6);      // "Pilot"
+echo $session->getRoleName(99);     // "Unknown"</code></pre>
+                    <div class="demo-title">Role Map</div>
+                    <table class="param-table">
+                        <thead><tr><th>ID</th><th>Name</th><th>ID</th><th>Name</th></tr></thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="role-badge role-1">1</span></td><td>Admin</td>
+                                <td><span class="role-badge role-5">5</span></td><td>Driver</td>
+                            </tr>
+                            <tr>
+                                <td><span class="role-badge role-2">2</span></td><td>Manager</td>
+                                <td><span class="role-badge role-6">6</span></td><td>Pilot</td>
+                            </tr>
+                            <tr>
+                                <td><span class="role-badge role-3">3</span></td><td>Partner</td>
+                                <td><span class="role-badge role-7">7</span></td><td>Accounter</td>
+                            </tr>
+                            <tr>
+                                <td><span class="role-badge role-4">4</span></td><td>Transporter</td>
+                                <td><span class="role-badge role-8">8</span></td><td>Greeter</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- SECTION 3: ROLE CHECKERS -->
+                <h2 class="section-title mt-5"><i class="fas fa-user-check"></i> 3. Role Checker Methods</h2>
+
+                <div class="method-card">
+                    <div class="method-name">Individual Role Checkers</div>
+                    <div class="method-detail">
+                        Convenience boolean methods that check if the user is logged in <strong>AND</strong> has a specific role. Useful for conditional logic inside controllers or views.
+                    </div>
+                    <table class="param-table">
+                        <thead><tr><th>Method</th><th>Checks Role</th><th>Returns</th></tr></thead>
+                        <tbody>
+                            <tr><td><code>isAdmin()</code></td><td>Role 1</td><td><code>bool</code></td></tr>
+                            <tr><td><code>isManager()</code></td><td>Role 2</td><td><code>bool</code></td></tr>
+                            <tr><td><code>isPartner()</code></td><td>Role 3</td><td><code>bool</code></td></tr>
+                            <tr><td><code>isTransporter()</code></td><td>Role 4</td><td><code>bool</code></td></tr>
+                            <tr><td><code>isDriver()</code></td><td>Role 5</td><td><code>bool</code></td></tr>
+                            <tr><td><code>isPilot()</code></td><td>Role 6</td><td><code>bool</code></td></tr>
+                            <tr><td><code>isAccounter()</code></td><td>Role 7</td><td><code>bool</code></td></tr>
+                            <tr><td><code>isGreeter()</code></td><td>Role 8</td><td><code>bool</code></td></tr>
+                        </tbody>
+                    </table>
+                    <div class="demo-title">Example Usage</div>
+<pre><code class="language-php">$session = new SessionHelper();
+
+if ($session->isAdmin()) {
+    // Show admin-only actions
+}
+
+if ($session->isPartner() || $session->isTransporter()) {
+    // Logic for both partners and transporters
+}</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">hasRole($roleId)</div>
+                    <div class="method-detail">
+                        Generic role check — returns <code>true</code> if the user is logged in and their role matches the given ID. Use this when the role ID is dynamic.
+                    </div>
+<pre><code class="language-php">// Dynamic role check
+$roleToCheck = 3;
+
+if ($session->hasRole($roleToCheck)) {
+    echo "User is a Partner";
+}</code></pre>
+                </div>
+
+                <!-- SECTION 4: ACCESS CONTROL GUARDS -->
+                <h2 class="section-title mt-5"><i class="fas fa-lock"></i> 4. Access Control Guards (Enforcement)</h2>
+
+                <div class="method-card">
+                    <div class="method-name">requireLogin($redirect = 'logins/index')</div>
+                    <div class="method-detail">
+                        Checks if the user is logged in. If <strong>not</strong>, sets a flash message and redirects to the login page. Execution <strong>stops immediately</strong> via <code>Helper::redirect()</code>.
+                    </div>
+                    <div class="demo-title">Example — Protect a page for any authenticated user</div>
+<pre><code class="language-php">class Profile extends Controller
+{
+    public function __construct()
+    {
+        $this->session = new SessionHelper();
+        
+        // Any logged-in user can access, regardless of role
+        $this->session->requireLogin();
+    }
+}</code></pre>
+                    <div class="demo-title">Custom redirect target</div>
+<pre><code class="language-php">// Redirect to a custom page instead of the login page
+$this->session->requireLogin('pages/maintenance');</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">requireAdmin($redirect = 'errors/error')</div>
+                    <div class="method-detail">
+                        Shortcut that redirects non-admin users (role ≠ 1) to an error page with an "Access denied" flash message.
+                    </div>
+                    <div class="demo-title">Example — Admin-only controller</div>
+<pre><code class="language-php">class Settings extends Controller
+{
+    public function __construct()
+    {
+        $this->session = new SessionHelper();
+        
+        // Only role 1 (Admin) can access
+        $this->session->requireAdmin();
+    }
+}</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">requirePartner($redirect = 'errors/error')</div>
+                    <div class="method-detail">
+                        Shortcut that redirects non-partner users (role ≠ 3) to an error page.
+                    </div>
+<pre><code class="language-php">class PartnerBookings extends Controller
+{
+    public function __construct()
+    {
+        $this->session = new SessionHelper();
+        
+        // Only role 3 (Partner) can access
+        $this->session->requirePartner();
+    }
+}</code></pre>
+                </div>
+
+                <div class="method-card" style="border: 2px solid #6366f1;">
+                    <div class="method-name" style="font-size: 1.5rem;">⭐ requireRoles(array $allowedRoles, $redirect)</div>
+                    <div class="method-detail">
+                        <strong>The most flexible and recommended guard.</strong> Checks if the user is logged in and if their role is in the <code>$allowedRoles</code> array. If not, redirects with an "Access denied" flash message. This is the <strong>preferred method</strong> for all new controllers.
+                    </div>
+
+                    <div class="demo-title">Parameters</div>
+                    <table class="param-table">
+                        <thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                        <tbody>
+                            <tr>
+                                <td><code>$allowedRoles</code></td>
+                                <td><code>array</code></td>
+                                <td>—</td>
+                                <td>Array of role IDs that are allowed access. e.g. <code>[1, 2]</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>$redirect</code></td>
+                                <td><code>string</code></td>
+                                <td><code>'errors/error'</code></td>
+                                <td>URL path to redirect to if access is denied.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="demo-title">Example 1 — Admin only</div>
+<pre><code class="language-php">$this->session->requireRoles([1], 'errors/error');</code></pre>
+
+                    <div class="demo-title">Example 2 — Admin + Manager</div>
+<pre><code class="language-php">$this->session->requireRoles([1, 2], 'errors/error');</code></pre>
+
+                    <div class="demo-title">Example 3 — Partner + Transporter</div>
+<pre><code class="language-php">$this->session->requireRoles([3, 4], 'errors/error');</code></pre>
+
+                    <div class="demo-title">Example 4 — All roles except Greeter</div>
+<pre><code class="language-php">$this->session->requireRoles([1, 2, 3, 4, 5, 6, 7], 'errors/error');</code></pre>
+
+                    <div class="success-box">
+                        <i class="fas fa-check-circle"></i> <strong>Best Practice:</strong> Always use <code>requireRoles()</code> instead of <code>requireAdmin()</code> or <code>requirePartner()</code>. It's more flexible and makes it easy to add new roles later without touching the SessionHelper class.
+                    </div>
+                </div>
+
+                <!-- SECTION 5: ROLE-BASED REDIRECT -->
+                <h2 class="section-title mt-5"><i class="fas fa-random"></i> 5. Role-Based Redirect</h2>
+
+                <div class="method-card">
+                    <div class="method-name">redirectByRole()</div>
+                    <div class="method-detail">
+                        Redirects the user to their <strong>role-specific dashboard</strong> after login. Typically called from the login controller after successful authentication.
+                    </div>
+
+                    <table class="param-table">
+                        <thead><tr><th>Role</th><th>Redirects To</th></tr></thead>
+                        <tbody>
+                            <tr><td><span class="role-badge role-1">1</span> Admin</td><td><code>pages/index</code></td></tr>
+                            <tr><td><span class="role-badge role-2">2</span> Manager</td><td><code>managers/index</code></td></tr>
+                            <tr><td><span class="role-badge role-3">3</span> Partner</td><td><code>partners/index</code></td></tr>
+                            <tr><td><span class="role-badge role-4">4</span> Transporter</td><td><code>transporters/index</code></td></tr>
+                            <tr><td><span class="role-badge role-5">5</span> Driver</td><td><code>drivers/index</code></td></tr>
+                            <tr><td><span class="role-badge role-6">6</span> Pilot</td><td><code>pilots/index</code></td></tr>
+                            <tr><td><span class="role-badge role-7">7</span> Accounter</td><td><code>accountants/index</code></td></tr>
+                            <tr><td><span class="role-badge role-8">8</span> Greeter</td><td><code>greeters/index</code></td></tr>
+                        </tbody>
+                    </table>
+
+                    <div class="demo-title">Example — After login success</div>
+<pre><code class="language-php">class Logins extends Controller
+{
+    public function login()
+    {
+        // ... validate credentials, start session ...
+
+        if ($loginSuccess) {
+            $_SESSION['user_id']   = $user->id;
+            $_SESSION['user_role'] = $user->role;
+            $_SESSION['first_name'] = $user->first_name;
+            $_SESSION['last_name']  = $user->last_name;
+            $_SESSION['email']      = $user->email;
+
+            // Redirect to the correct dashboard
+            $session = new SessionHelper();
+            $session->redirectByRole();
+        }
+    }
+}</code></pre>
+                </div>
+
+                <!-- SECTION 6: DESTROY SESSION -->
+                <h2 class="section-title mt-5"><i class="fas fa-sign-out-alt"></i> 6. Destroy Session (Logout)</h2>
+
+                <div class="method-card">
+                    <div class="method-name">destroy()</div>
+                    <div class="method-detail">
+                        Clears all session data and destroys the session. Call this in your logout controller method.
+                    </div>
+<pre><code class="language-php">class Logins extends Controller
+{
+    public function logout()
+    {
+        $session = new SessionHelper();
+        $session->destroy();
+
+        Helper::redirect('logins/index');
+    }
+}</code></pre>
+                </div>
+
+                <!-- SECTION 7: COMPLETE CONTROLLER EXAMPLE -->
+                <h2 class="section-title mt-5"><i class="fas fa-file-code"></i> 7. Complete Real-World Controller Example</h2>
+
+                <div class="method-card">
+                    <div class="method-name">Full Controller with SessionHelper</div>
+                    <div class="method-detail">
+                        This is a complete, production-ready controller showing all SessionHelper patterns in context — access control, user data for audit trails, and permission-guarded methods.
+                    </div>
+<pre><code class="language-php">&lt;?php
+
+class PartnersProducts extends Controller
+{
+    private $mod;
+    private $help;
+    private $session;
+    private $adminId;
+    private $adminName;
+
+    public function __construct()
+    {
+        // Load model
+        $this->mod = $this->model('PartnersProduct');
+        $this->help = new Helper();
+
+        // ① Initialize SessionHelper
+        $this->session = new SessionHelper();
+
+        // ② Enforce access — Only Admins (role 1) can access
+        $this->session->requireRoles([1], 'errors/error');
+
+        // ③ Store user info for audit logging
+        $this->adminId   = $this->session->getUserId();
+        $this->adminName = $this->session->getUserName();
+    }
+
+    public function index()
+    {
+        $appSettings = $this->mod->table('app_settings')->get();
+        $appCurrency = !empty($appSettings)
+            ? $appSettings[0]->app_currency
+            : 'MAD';
+
+        $data = [
+            'URLROOT'      => URLROOT,
+            'PRODUCTS'     => PRODUCTS,
+            'app_currency' => $appCurrency
+        ];
+
+        $this->view('partnersproducts/index', $data);
+    }
+
+    public function store()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            Helper::flash('partner_product_message', 'Invalid request', 'alert-danger');
+            Helper::redirect('errors/error');
+        }
+
+        $data = [
+            'partner_id'   => $this->help->int('partner_id'),
+            'product_name' => $this->help->text('product_name'),
+            // ... other fields
+            'admin_id'     => $this->adminId,      // ← audit trail
+            'admin_name'   => $this->adminName      // ← audit trail
+        ];
+
+        $result = $this->mod->table('partners_products')->insert($data);
+
+        if ($result) {
+            Helper::flash('partner_product_message', 'Added!', 'alert-success');
+        } else {
+            Helper::flash('partner_product_message', 'Failed!', 'alert-danger');
+        }
+        Helper::redirect('partnersproducts/index');
+    }
+}</code></pre>
+                </div>
+
+                <!-- SECTION 8: COMMON PATTERNS -->
+                <h2 class="section-title mt-5"><i class="fas fa-lightbulb"></i> 8. Common Access Control Patterns</h2>
+
+                <div class="method-card">
+                    <div class="method-name">Pattern A: Single Role</div>
+                    <div class="method-detail">Only one role can access the entire controller.</div>
+<pre><code class="language-php">// Admin-only controller
+$this->session->requireRoles([1], 'errors/error');
+
+// Partner-only controller  
+$this->session->requireRoles([3], 'errors/error');
+
+// Transporter-only controller
+$this->session->requireRoles([4], 'errors/error');</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Pattern B: Multiple Roles</div>
+                    <div class="method-detail">Several roles share the same controller but may see different data.</div>
+<pre><code class="language-php">// Admin + Manager can both manage bookings
+$this->session->requireRoles([1, 2], 'errors/error');
+
+// Admin + Partner + Transporter can view reports
+$this->session->requireRoles([1, 3, 4], 'errors/error');</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Pattern C: Per-Method Access Control</div>
+                    <div class="method-detail">
+                        Allow broad access in the constructor, then restrict specific methods. Useful when some actions (like viewing) are open to many roles but editing is restricted.
+                    </div>
+<pre><code class="language-php">class Reports extends Controller
+{
+    public function __construct()
+    {
+        $this->session = new SessionHelper();
+        // Any authenticated user can access the controller
+        $this->session->requireLogin();
+    }
+
+    public function index()
+    {
+        // Everyone can view reports
+        $this->view('reports/index');
+    }
+
+    public function export()
+    {
+        // Only Admin and Manager can export
+        $this->session->requireRoles([1, 2], 'errors/error');
+        
+        // ... export logic
+    }
+
+    public function delete($id)
+    {
+        // Only Admin can delete
+        $this->session->requireRoles([1], 'errors/error');
+
+        // ... delete logic
+    }
+}</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Pattern D: Conditional View Content</div>
+                    <div class="method-detail">
+                        Pass role info to the view so the template can show/hide UI elements.
+                    </div>
+<pre><code class="language-php">// In the controller
+$data = [
+    'isAdmin'   => $this->session->isAdmin(),
+    'isManager' => $this->session->isManager(),
+    'roleName'  => $this->session->getRoleName(),
+    'userName'  => $this->session->getUserName()
+];
+$this->view('dashboard/index', $data);
+
+// In the view template
+&lt;?php if ($data['isAdmin']) : ?&gt;
+    &lt;button class="btn btn-danger"&gt;Delete All&lt;/button&gt;
+&lt;?php endif; ?&gt;
+
+&lt;?php if ($data['isAdmin'] || $data['isManager']) : ?&gt;
+    &lt;a href="reports/export"&gt;Export CSV&lt;/a&gt;
+&lt;?php endif; ?&gt;</code></pre>
+                </div>
+
+                <!-- SECTION 9: SECURITY CHECKLIST -->
+                <h2 class="section-title mt-5"><i class="fas fa-clipboard-check"></i> 9. Security Checklist</h2>
+
+                <div class="method-card">
+                    <div class="method-detail">Use this checklist every time you create a new controller:</div>
+                    <table class="param-table">
+                        <thead><tr><th>✓</th><th>Check</th><th>How</th></tr></thead>
+                        <tbody>
+                            <tr>
+                                <td>☐</td>
+                                <td>Constructor has <code>new SessionHelper()</code></td>
+                                <td>Instantiate in <code>__construct()</code></td>
+                            </tr>
+                            <tr>
+                                <td>☐</td>
+                                <td>Constructor calls <code>requireRoles()</code> or <code>requireLogin()</code></td>
+                                <td>Choose the right guard for your access level</td>
+                            </tr>
+                            <tr>
+                                <td>☐</td>
+                                <td>Sidebar menu item uses same role IDs</td>
+                                <td>Match <code>$allowedRoles</code> in <code>aside.php</code></td>
+                            </tr>
+                            <tr>
+                                <td>☐</td>
+                                <td>POST-only methods check <code>$_SERVER['REQUEST_METHOD']</code></td>
+                                <td>Prevent GET requests to data-modifying actions</td>
+                            </tr>
+                            <tr>
+                                <td>☐</td>
+                                <td>Audit fields include <code>admin_id</code> / <code>admin_name</code></td>
+                                <td>Use <code>getUserId()</code> and <code>getUserName()</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-php.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+</body>
+</html>

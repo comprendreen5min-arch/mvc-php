@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QueryBuilder - Documentation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --dark-color: #1e293b;
+        }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+        }
+        .sidebar {
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            color: #cbd5e1;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow-y: auto;
+            padding: 25px 0;
+            z-index: 100;
+        }
+        .sidebar-brand {
+            padding: 0 25px 20px 25px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 20px;
+        }
+        .nav-section { margin-bottom: 20px; }
+        .nav-section-title {
+            padding: 10px 25px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #64748b;
+            font-weight: 700;
+        }
+        .nav-link {
+            color: #94a3b8;
+            padding: 8px 25px 8px 35px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            font-size: 0.88rem;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .content-area {
+            padding: 40px 50px;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .section-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        .method-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            transition: all 0.2s ease;
+        }
+        .method-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .method-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-family: monospace;
+            margin-bottom: 10px;
+        }
+        pre {
+            border-radius: 8px !important;
+            background: #0f172a !important;
+            padding: 16px !important;
+        }
+        code {
+            font-family: Consolas, Monaco, monospace !important;
+            font-size: 0.85rem !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid p-0">
+        <div class="row g-0">
+            <!-- Sidebar -->
+            <div class="col-lg-3 sidebar">
+                <div class="sidebar-brand">
+                    <i class="fas fa-cubes text-primary"></i> MVC Framework
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Navigation</div>
+                    <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Documentation Home</a>
+                    <a href="architecture.html" class="nav-link"><i class="fas fa-sitemap"></i> MVC Architecture</a>
+                    <a href="core.html" class="nav-link"><i class="fas fa-route"></i> Core Router</a>
+                    <a href="controller.html" class="nav-link"><i class="fas fa-gamepad"></i> Controller Class</a>
+                    <a href="environment.html" class="nav-link"><i class="fas fa-cog"></i> Environment Config</a>
+                    <a href="database.html" class="nav-link"><i class="fas fa-database"></i> Database class</a>
+                    <a href="model.html" class="nav-link"><i class="fas fa-layer-group"></i> Model class</a>
+                    <a href="querybuilder.html" class="nav-link active"><i class="fas fa-project-diagram"></i> QueryBuilder</a>
+                    <a href="querybuilder-examples.html" class="nav-link"><i class="fas fa-flask"></i> QB in Practice</a>
+                    <a href="helpers.html" class="nav-link"><i class="fas fa-magic"></i> Helper Utilities</a>
+                    <a href="datatables.html" class="nav-link"><i class="fas fa-table"></i> DataTables</a>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-lg-9 content-area">
+                <h1 class="section-title">QueryBuilder Class Reference</h1>
+                <p>Learn how to use the fluent QueryBuilder wrapper class to construct secure SQL statements dynamically.</p>
+
+                <!-- SELECT -->
+                <h3 class="mt-5 text-dark font-weight-bold">1. Chained Data Selection API</h3>
+                
+                <div class="method-card">
+                    <div class="method-name">$this->table($name)</div>
+                    <p class="mb-2 text-muted">Initializes the QueryBuilder instance for a targeted database table. This is always the starting point of the chain.</p>
+                    <pre><code class="language-php">$query = $this->table('users');</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">select($columns = '*')</div>
+                    <p class="mb-2 text-muted">Sets custom target columns for the query retrieval instead of pulling all columns.</p>
+                    <pre><code class="language-php">$users = $this->table('users')
+    ->select('id, first_name, email')
+    ->get();</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">get()</div>
+                    <p class="mb-2 text-muted">Executes the constructed query layout against the database and yields a result set array of objects.</p>
+                    <pre><code class="language-php">$activeManagers = $this->table('users')
+    ->where('user_role', 2)
+    ->get();</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">first()</div>
+                    <p class="mb-2 text-muted">Retrieves the first matching record object or returns null if no rows matches requirements.</p>
+                    <pre><code class="language-php">$adminUser = $this->table('users')
+    ->where('user_role', 1)
+    ->first();</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">count()</div>
+                    <p class="mb-2 text-muted">Constructs and executes an SQL <code>COUNT(*)</code> query based on defined conditions, returning the integer total.</p>
+                    <pre><code class="language-php">$totalPartners = $this->table('users')
+    ->where('user_role', 3)
+    ->count();</code></pre>
+                </div>
+
+                <!-- WHERE CONDITIONS -->
+                <h3 class="mt-5 text-dark font-weight-bold">2. SQL Filtering Constraints</h3>
+
+                <div class="method-card">
+                    <div class="method-name">where($column, $value, $operator = '=')</div>
+                    <p class="mb-2 text-muted">Adds standard column restrictions. Supports custom operators (e.g. <code>&lt;</code>, <code>&gt;</code>, <code>LIKE</code>).</p>
+                    <pre><code class="language-php">$recentUsers = $this->table('users')
+    ->where('id', 10, '>')
+    ->get();</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">whereIn($column, array $values)</div>
+                    <p class="mb-2 text-muted">Restricts queries to records where values match a collection array.</p>
+                    <pre><code class="language-php">$users = $this->table('users')
+    ->whereIn('user_role', [1, 2])
+    ->get();</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">whereLike($column, $value)</div>
+                    <p class="mb-2 text-muted">Wrapper method triggering a standard SQL <code>LIKE</code> comparison check.</p>
+                    <pre><code class="language-php">$users = $this->table('users')
+    ->whereLike('email', '%@domain.com')
+    ->get();</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">whereNull($column) / whereNotNull($column)</div>
+                    <p class="mb-2 text-muted">Includes SQL <code>IS NULL</code> or <code>IS NOT NULL</code> queries parameters.</p>
+                    <pre><code class="language-php">// Fetch records without phone numbers
+$users = $this->table('users')->whereNull('phone')->get();</code></pre>
+                </div>
+
+                <!-- ORDERING & LIMITS -->
+                <h3 class="mt-5 text-dark font-weight-bold">3. Sorting & Pagination Limits</h3>
+
+                <div class="method-card">
+                    <div class="method-name">orderBy($column, $direction = 'ASC')</div>
+                    <p class="mb-2 text-muted">Sets standard sorting parameters to organize query data.</p>
+                    <pre><code class="language-php">$users = $this->table('users')
+    ->orderBy('first_name', 'ASC')
+    ->get();</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">limit($limit, $offset = 0)</div>
+                    <p class="mb-2 text-muted">Limits query return size and sets database pagination offsets.</p>
+                    <pre><code class="language-php">$pageThreeUsers = $this->table('users')
+    ->limit(10, 20)
+    ->get();</code></pre>
+                </div>
+
+                <!-- WRITING OPERATORS -->
+                <h3 class="mt-5 text-dark font-weight-bold">4. Database Data Mutations (CRUD)</h3>
+
+                <div class="method-card">
+                    <div class="method-name">insert(array $data)</div>
+                    <p class="mb-2 text-muted">Inserts a raw data record mapping key parameters to column values. Executed immediately.</p>
+                    <pre><code class="language-php">$this->table('users')->insert([
+    'first_name' => 'Steve',
+    'email' => 'steve@apple.com'
+]);</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">update(array $data) / save()</div>
+                    <div class="alert alert-warning">
+                        <strong>Safety Constraint:</strong> The QueryBuilder enforces specifying a <code>where()</code> query prior to saving updates. Calling <code>save()</code> without conditions triggers an Exception.
+                    </div>
+                    <p class="mb-2 text-muted">Prepares target changes and executes the statement upon calling <code>save()</code>.</p>
+                    <pre><code class="language-php">$this->table('users')
+    ->where('id', 5)
+    ->update(['first_name' => 'Steven'])
+    ->save();</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">delete()</div>
+                    <p class="mb-2 text-muted">Performs database delete statement execution. Requires an active <code>where()</code> clause beforehand.</p>
+                    <pre><code class="language-php">$this->table('users')
+    ->where('id', 5)
+    ->delete();</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">softDelete()</div>
+                    <p class="mb-2 text-muted">Updates the target record, setting `soft_delete = 0` to hide it from standard finders.</p>
+                    <pre><code class="language-php">$this->table('users')
+    ->where('id', 5)
+    ->softDelete();</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

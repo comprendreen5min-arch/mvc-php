@@ -1,0 +1,360 @@
+:root {
+  --purple:    #8e44ad;
+  --lavender:  #b388eb;
+  --peach:     #ffb199;
+  --lightgreen:#7bed9f;
+  --mint:      #55efc4;
+  --sky:       #74b9ff;
+  --softgray:  #f1f2f6;
+  --darktext:  #2d3436;
+  --lightgray: #f4f4f4;
+  --lightpeach: #FFDAB3;
+}
+.bg-purple    { background-color: var(--purple) !important; color:#fff; }
+.bg-lavender  { background-color: var(--lavender) !important; color:#fff; }
+.bg-peach     { background-color: var(--peach) !important; color:#2d3436; }
+.bg-lightgreen{ background-color: var(--lightgreen) !important; color:#2d3436; }
+.bg-mint      { background-color: var(--mint) !important; color:#2d3436; }
+.bg-sky       { background-color: var(--sky) !important; color:#fff; }
+.bg-softgray  { background-color: var(--softgray) !important; color:#2d3436; }
+.bg-darktext  { background-color: var(--darktext) !important; color:#fff; }
+.bg-lightgray { background-color: var(--lightgray) !important; color:#2d3436; }
+.bg-lightpeach { background-color: var(--lightpeach) !important; color:#2d3436; }
+
+.color-purple{
+  color: var(--purple) !important;
+}
+.color-lavender{
+  color: var(--lavender) !important;
+}
+.color-peach{
+  color: var(--peach) !important;
+}
+.color-lightgreen{
+  color: var(--lightgreen) !important;
+}
+.color-mint{
+  color: var(--mint) !important;
+}
+.color-sky{
+  color: var(--sky) !important;
+}
+.color-softgray{
+  color: var(--softgray) !important;
+}
+.color-darktext{
+  color: var(--darktext) !important;
+}
+.color-lightgray{
+  color: var(--lightgray) !important;
+}
+.color-lightpeach{
+  color: var(--lightpeach) !important;
+}
+
+.btn-xm {
+  --bs-btn-padding-y: 0.10rem;
+  --bs-btn-padding-x: 0.2rem;
+  --bs-btn-font-size: 0.5rem;
+  --bs-btn-border-radius: var(--bs-border-radius-sm);
+}
+.add-label label{
+
+  color: #626ed4
+
+}
+.text-justify {
+  text-align: justify;
+}
+.update-label label {
+  color: #02a499;
+}
+.form-control:disabled {
+  background-color: #f2f2f2 !important;
+  opacity: 1;
+  cursor: not-allowed;
+}
+input::placeholder {
+  color: #ccc !important;
+}
+
+input::-webkit-input-placeholder {
+  color: #ccc !important; /* Chrome, Safari, Opera */
+}
+
+input::-moz-placeholder {
+  color: #ccc !important; /* Firefox 19+ */
+}
+
+input:-ms-input-placeholder {
+  color: #ccc !important; /* Internet Explorer 10+ */
+}
+
+input:-moz-placeholder {
+  color: #ccc !important; /* Firefox 4-18 */
+}
+.z-1000{
+  z-index: 1000;
+}
+.z-2000{
+  z-index: 2000;
+}
+.bg-alice{
+  background-color: #36C2CE !important;
+}
+.bg-orange {
+  background-color: #EB5B00 !important;
+}
+.form-border-danger{
+    border: var(--bs-border-width) solid #ee0505 !important;
+}
+.form-border-success{
+  border: var(--bs-border-width) solid #02a499 !important;
+
+}
+.datatable-style {
+    border-collapse: collapse;
+     border-spacing: 0; 
+     width: 100%;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover{
+  border:1px solid #f4f4f4 !important;
+  background: #f2f2f2 !important;
+}
+
+.border-danger{
+    border: var(--bs-border-width) solid #d01616 !important;
+}
+.border-success{
+  border: var(--bs-border-width) solid #02a499 !important;
+}
+.br-0{
+  border-radius: 0px !important;
+}
+.loader {
+    position: relative;
+    width: 100px;
+    height: 13px;
+  }
+  .loader:before , .loader:after{
+    content: "";
+    position: absolute;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: #626ed4;
+    box-shadow: 32px 0 #626ed4;
+    left: -100px;
+    top: 0;
+    animation: ballMoveX 2s linear infinite;
+  }
+  .loader:after {
+    box-shadow: none;
+    transform: translateX(64px) scale(1);
+    z-index: 2;
+    animation: none;
+    animation: trfLoader 2s linear infinite;
+  }
+  
+  @keyframes trfLoader {
+    0% , 5%{
+      transform: translateX(64px) scale(1);
+      background: #626ed4;
+    }
+    10%{
+      transform: translateX(64px) scale(1);
+      background: #ff3d00;
+    }
+    40%{
+        transform: translateX(32px) scale(1.5);
+        background: #ff3d00;
+      }
+    90%, 95% {
+      transform: translateX(0px) scale(1);
+      background: #ff3d00;
+    }
+    100% {
+      transform: translateX(0px) scale(1);
+      background: #626ed4;
+    }
+  }
+  @keyframes ballMoveX {
+    0% , 10%{  transform: translateX(0) }
+    90%, 100% { transform: translateX(32px) }
+  }
+        
+
+  .table.dataTable thead .sorting::before, .table.dataTable thead .sorting_asc::before, .table.dataTable thead .sorting_desc::before, .table.dataTable thead .sorting_asc_disabled::before, .table.dataTable thead .sorting_desc_disabled::before{
+    left: 0.5em !important;
+  }
+
+.session-litigation-case-name{
+  --bs-list-group-item-padding-y : 0.10rem !important;
+}
+.bg-default{
+  background-color: #f0f0f0;
+}
+
+.select-w{
+  width: 100% !important;
+}
+.input-group .select2-container {
+  flex: 1 1 auto;
+  width: 1% !important;
+}
+.select2-container {
+  z-index: 1055 !important; /* Bootstrap modal is 1050 */
+  width: 100% !important;
+}
+
+.w-50{
+  width:50% !important;
+}
+.w-60{
+  width:60% !important;
+}
+.w-30{
+  width:30% !important;
+}
+.w-20{
+  width:20% !important;
+}
+.w-10{
+  width:10% !important;
+}
+.w-70{
+  width:70% !important;
+}
+.w-40{
+  width:40% !important;
+}
+.w-100{
+  width:100% !important;
+}
+.w-33{
+   width:33% !important;
+}
+.pointer{
+  cursor: pointer;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* For Firefox (optional) */
+body {
+  scrollbar-width: thin; /* Set scrollbar width */
+  scrollbar-color: #888 #f1f1f1; /* Handle color and track color */
+}
+
+/* Reusable class for smooth scrolling and custom scrollbar */
+.smooth-scrollbar {
+  scroll-behavior: smooth;
+  overflow: auto; /* Ensure scrollable content if necessary */
+}
+
+/* Custom scrollbar styling */
+.smooth-scrollbar::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+.smooth-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Background color of the track */
+  border-radius: 8px; /* Rounded corners for the track */
+}
+
+.smooth-scrollbar::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the scrollbar handle */
+  border-radius: 8px; /* Rounded corners for the handle */
+}
+
+.smooth-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Darker color on hover */
+}
+
+/* Firefox support */
+.smooth-scrollbar {
+  scrollbar-width: thin; /* Thin scrollbar */
+  scrollbar-color: #888 #f1f1f1; /* Handle and track colors */
+}
+
+
+/* Text Uppercase */
+.uppercase{
+  text-transform: uppercase;
+}
+
+
+
+
+
+
+
+/* PRINT */
+@media print {
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .no-print {
+    display: none;
+  }
+
+  @page {
+    margin: 1cm;
+  }
+
+  body {
+    font-family: Arial, sans-serif;
+    font-size: 12pt;
+    line-height: 1.5;
+  }
+
+  h1, h2, h3 {
+    page-break-after: avoid;
+  }
+
+  /* Footer - matching the working project */
+  .print-footer {
+    position: fixed;
+    bottom: 10px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 10px;
+  }
+
+  .card-body {
+    page-break-inside: avoid;
+  }
+
+  .card-footer,
+  .card-header,
+  #page-topbar,
+  .vertical-menu {
+    display: none !important;
+  }
+}

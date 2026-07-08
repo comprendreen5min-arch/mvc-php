@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controller Base Class - Documentation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --dark-color: #1e293b;
+        }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+        }
+        .sidebar {
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            color: #cbd5e1;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow-y: auto;
+            padding: 25px 0;
+            z-index: 100;
+        }
+        .sidebar::-webkit-scrollbar { width: 6px; }
+        .sidebar::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
+        .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+        .sidebar-brand {
+            padding: 0 25px 20px 25px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 20px;
+        }
+        .nav-section { margin-bottom: 20px; }
+        .nav-section-title {
+            padding: 10px 25px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #64748b;
+            font-weight: 700;
+        }
+        .nav-link {
+            color: #94a3b8;
+            padding: 8px 25px 8px 35px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            font-size: 0.88rem;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .nav-link.active {
+            border-left: 3px solid var(--primary-color);
+        }
+        .content-area {
+            padding: 40px 55px;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .page-header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            border-radius: 16px;
+            padding: 40px;
+            color: white;
+            margin-bottom: 40px;
+        }
+        .page-header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .page-header p { color: #94a3b8; font-size: 1.05rem; margin: 0; }
+        .badge-tag {
+            background: rgba(99, 102, 241, 0.15);
+            color: #818cf8;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-top: 50px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: #e2e8f0;
+        }
+        .method-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 28px 30px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            transition: all 0.2s ease;
+        }
+        .method-card:hover {
+            box-shadow: 0 6px 20px rgba(0,0,0,0.07);
+            border-color: #c7d2fe;
+        }
+        .method-name {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-family: 'Consolas', monospace;
+            margin-bottom: 10px;
+        }
+        .method-desc {
+            color: #64748b;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+        pre {
+            border-radius: 10px !important;
+            background: #0f172a !important;
+            padding: 18px !important;
+            margin-bottom: 0 !important;
+        }
+        code {
+            font-family: 'Consolas', Monaco, monospace !important;
+            font-size: 0.84rem !important;
+        }
+        .info-box {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            border-radius: 0 8px 8px 0;
+            padding: 15px 20px;
+            margin: 20px 0;
+            color: #1e40af;
+            font-size: 0.92rem;
+        }
+        .warn-box {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            border-radius: 0 8px 8px 0;
+            padding: 15px 20px;
+            margin: 20px 0;
+            color: #92400e;
+            font-size: 0.92rem;
+        }
+        .success-box {
+            background: #f0fdf4;
+            border-left: 4px solid #22c55e;
+            border-radius: 0 8px 8px 0;
+            padding: 15px 20px;
+            margin: 20px 0;
+            color: #15803d;
+            font-size: 0.92rem;
+        }
+        .directive-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 24px;
+        }
+        .directive-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .directive-card .d-name {
+            font-family: monospace;
+            color: #6366f1;
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 6px;
+        }
+        .directive-card .d-converts {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            font-family: monospace;
+        }
+        @media (max-width: 768px) { .directive-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+<div class="container-fluid p-0">
+    <div class="row g-0">
+        <!-- Sidebar -->
+        <div class="col-lg-3 sidebar">
+            <div class="sidebar-brand">
+                <i class="fas fa-cubes text-primary"></i> MVC Framework
+            </div>
+            <div class="nav-section">
+                <div class="nav-section-title">Navigation</div>
+                <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Documentation Home</a>
+                <a href="architecture.html" class="nav-link"><i class="fas fa-sitemap"></i> MVC Architecture</a>
+                <a href="core.html" class="nav-link"><i class="fas fa-route"></i> Core Router</a>
+                <a href="controller.html" class="nav-link active"><i class="fas fa-gamepad"></i> Controller Class</a>
+                <a href="environment.html" class="nav-link"><i class="fas fa-cog"></i> Environment Config</a>
+                <a href="database.html" class="nav-link"><i class="fas fa-database"></i> Database Class</a>
+                <a href="model.html" class="nav-link"><i class="fas fa-layer-group"></i> Model Class</a>
+                <a href="querybuilder.html" class="nav-link"><i class="fas fa-project-diagram"></i> QueryBuilder</a>
+                <a href="helpers.html" class="nav-link"><i class="fas fa-magic"></i> Helper Utilities</a>
+                <a href="datatables.html" class="nav-link"><i class="fas fa-table"></i> DataTables</a>
+            </div>
+            <div class="nav-section">
+                <div class="nav-section-title">On This Page</div>
+                <a href="#overview" class="nav-link"><i class="fas fa-circle-dot" style="font-size:0.6rem"></i> Overview</a>
+                <a href="#model-method" class="nav-link"><i class="fas fa-circle-dot" style="font-size:0.6rem"></i> model()</a>
+                <a href="#view-method" class="nav-link"><i class="fas fa-circle-dot" style="font-size:0.6rem"></i> view()</a>
+                <a href="#template-engine" class="nav-link"><i class="fas fa-circle-dot" style="font-size:0.6rem"></i> Template Engine</a>
+                <a href="#full-example" class="nav-link"><i class="fas fa-circle-dot" style="font-size:0.6rem"></i> Full Example</a>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="col-lg-9 content-area">
+
+            <!-- Page Header -->
+            <div class="page-header" id="overview">
+                <div class="badge-tag"><i class="fas fa-gamepad"></i> Core Library</div>
+                <h1>Controller Base Class</h1>
+                <p>The <code style="color:#a5b4fc">Controller</code> class is the base that all your application controllers extend. It provides <code style="color:#a5b4fc">model()</code> and <code style="color:#a5b4fc">view()</code> methods, plus a built-in Blade-like template engine for clean PHP views.</p>
+            </div>
+
+            <!-- model() -->
+            <div class="section-title" id="model-method"><i class="fas fa-layer-group text-primary"></i> model()</div>
+            <div class="method-card">
+                <div class="method-name">$this->model(string $model) : object</div>
+                <p class="method-desc">Loads a Model class file from <code>app/models/</code>, instantiates it, and returns the object. Call this in your controller's constructor to make the model available throughout all methods.</p>
+                <pre><code class="language-php">// In your controller __construct():
+$this->userModel = $this->model('User');
+// Loads: app/models/User.php
+// Returns: new User()
+
+// Then use it in any method:
+public function index() {
+    $users = $this->userModel->all('users');
+}</code></pre>
+            </div>
+
+            <div class="info-box">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>Model filename = class name.</strong> Passing <code>'User'</code> loads <code>app/models/User.php</code> and instantiates <code>class User</code>. The names must match exactly (case-sensitive).
+            </div>
+
+            <!-- view() -->
+            <div class="section-title" id="view-method"><i class="fas fa-eye text-primary"></i> view()</div>
+            <div class="method-card">
+                <div class="method-name">$this->view(string $view, array $data = []) : void</div>
+                <p class="method-desc">Loads a view file from <code>app/views/</code>, compiles its template directives, extracts the <code>$data</code> array into PHP variables, and renders the output. Supports slash-separated subdirectory paths.</p>
+                <pre><code class="language-php">// Load: app/views/users/index.php
+// Pass $users variable into the view
+$this->view('users/index', [
+    'users'      => $users,
+    'pageTitle'  => 'All Users',
+    'totalCount' => count($users)
+]);
+
+// In the view file, access them directly:
+// {{ $pageTitle }}      → outputs "All Users"
+// {{ $totalCount }}     → outputs the count</code></pre>
+            </div>
+
+            <div class="warn-box">
+                <i class="fas fa-triangle-exclamation me-2"></i>
+                The view uses a <strong>temporary file</strong> mechanism — the compiled PHP is written to <code>sys_get_temp_dir()</code> and executed, then deleted automatically. This is transparent to you.
+            </div>
+
+            <!-- Template Engine -->
+            <div class="section-title" id="template-engine"><i class="fas fa-wand-sparkles text-primary"></i> Built-in Template Engine</div>
+            <p class="text-muted mb-4">The <code>compileView()</code> private method translates Blade-like syntax into standard PHP before rendering. You can use these directives inside any <code>.php</code> view file.</p>
+
+            <h5 class="fw-bold text-dark mb-3">Output Directive — <code>{{ }}</code></h5>
+            <div class="method-card">
+                <div class="method-name">{{ $variable }}</div>
+                <p class="method-desc">Outputs a variable safely with <code>htmlspecialchars()</code> (XSS-protected). Uses null-coalesce so missing variables won't throw errors.</p>
+                <pre><code class="language-php">// In the view file:
+&lt;h1&gt;{{ $pageTitle }}&lt;/h1&gt;
+&lt;p&gt;Welcome, {{ $user->first_name }}&lt;/p&gt;
+&lt;span&gt;{{ $user->role ?? 'Guest' }}&lt;/span&gt;
+
+// Compiles to:
+// &lt;?php echo htmlspecialchars(($pageTitle) ?? "", ENT_QUOTES, 'UTF-8'); ?&gt;</code></pre>
+            </div>
+
+            <h5 class="fw-bold text-dark mb-3 mt-4">Control Structure Directives</h5>
+            <div class="directive-grid">
+                <div class="directive-card">
+                    <div class="d-name">@if ($condition)</div>
+                    <div class="d-converts">→ &lt;?php if($condition): ?&gt;</div>
+                </div>
+                <div class="directive-card">
+                    <div class="d-name">@elseif ($condition)</div>
+                    <div class="d-converts">→ &lt;?php elseif($condition): ?&gt;</div>
+                </div>
+                <div class="directive-card">
+                    <div class="d-name">@else</div>
+                    <div class="d-converts">→ &lt;?php else: ?&gt;</div>
+                </div>
+                <div class="directive-card">
+                    <div class="d-name">@endif</div>
+                    <div class="d-converts">→ &lt;?php endif; ?&gt;</div>
+                </div>
+                <div class="directive-card">
+                    <div class="d-name">@foreach ($arr as $item)</div>
+                    <div class="d-converts">→ &lt;?php foreach($arr as $item): ?&gt;</div>
+                </div>
+                <div class="directive-card">
+                    <div class="d-name">@endforeach</div>
+                    <div class="d-converts">→ &lt;?php endforeach; ?&gt;</div>
+                </div>
+                <div class="directive-card">
+                    <div class="d-name">@for ($i = 0; $i &lt; 5; $i++)</div>
+                    <div class="d-converts">→ &lt;?php for($i=0;$i&lt;5;$i++): ?&gt;</div>
+                </div>
+                <div class="directive-card">
+                    <div class="d-name">@endfor</div>
+                    <div class="d-converts">→ &lt;?php endfor; ?&gt;</div>
+                </div>
+                <div class="directive-card">
+                    <div class="d-name">@while ($condition)</div>
+                    <div class="d-converts">→ &lt;?php while($condition): ?&gt;</div>
+                </div>
+                <div class="directive-card">
+                    <div class="d-name">@endwhile</div>
+                    <div class="d-converts">→ &lt;?php endwhile; ?&gt;</div>
+                </div>
+            </div>
+
+            <div class="method-card">
+                <div class="method-name">View Template Example</div>
+                <p class="method-desc">A real-world example combining all directives in a view file:</p>
+                <pre><code class="language-php">&lt;!-- app/views/users/index.php --&gt;
+&lt;h1&gt;{{ $pageTitle }}&lt;/h1&gt;
+&lt;p&gt;Total: {{ $totalCount }} users&lt;/p&gt;
+
+@if ($totalCount > 0)
+    &lt;table&gt;
+        &lt;tbody&gt;
+        @foreach ($users as $user)
+            &lt;tr&gt;
+                &lt;td&gt;{{ $user->first_name }}&lt;/td&gt;
+                &lt;td&gt;{{ $user->email }}&lt;/td&gt;
+                @if ($user->user_status == 1)
+                    &lt;td&gt;&lt;span class="badge bg-success"&gt;Active&lt;/span&gt;&lt;/td&gt;
+                @else
+                    &lt;td&gt;&lt;span class="badge bg-danger"&gt;Inactive&lt;/span&gt;&lt;/td&gt;
+                @endif
+            &lt;/tr&gt;
+        @endforeach
+        &lt;/tbody&gt;
+    &lt;/table&gt;
+@else
+    &lt;p&gt;No users found.&lt;/p&gt;
+@endif</code></pre>
+            </div>
+
+            <!-- Full Example -->
+            <div class="section-title" id="full-example"><i class="fas fa-code text-primary"></i> Full Controller Example</div>
+            <div class="method-card">
+                <p class="method-desc">A complete controller showing constructor model loading, multiple actions, and view rendering with data:</p>
+                <pre><code class="language-php">// app/controllers/Users.php
+class Users extends Controller
+{
+    private $userModel;
+
+    public function __construct()
+    {
+        // Load the User model once — reused in every method
+        $this->userModel = $this->model('User');
+    }
+
+    // /users  or  /users/index
+    public function index()
+    {
+        $data = [
+            'pageTitle' => 'Manage Users',
+            'users'     => $this->userModel->all('users'),
+        ];
+        $this->view('users/index', $data);
+    }
+
+    // /users/edit/5
+    public function edit($id)
+    {
+        $data = [
+            'pageTitle' => 'Edit User',
+            'user'      => $this->userModel->findById('users', $id),
+        ];
+        $this->view('users/edit', $data);
+    }
+
+    // /users/delete/5
+    public function delete($id)
+    {
+        $this->userModel->delete('users', $id);
+        header('Location: ' . URLROOT . '/users');
+        exit;
+    }
+}</code></pre>
+            </div>
+
+            <div class="success-box mb-5">
+                <i class="fas fa-circle-check me-2"></i>
+                <strong>Best Practice:</strong> Always load models in <code>__construct()</code> — not inside individual methods. This avoids re-instantiation and keeps your controller clean.
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-php.min.js"></script>
+</body>
+</html>

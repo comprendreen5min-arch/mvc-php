@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QueryBuilder in Practice — Real Controller Examples</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --dark-color: #1e293b;
+        }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+        }
+        .sidebar {
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            color: #cbd5e1;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow-y: auto;
+            padding: 25px 0;
+            z-index: 100;
+        }
+        .sidebar::-webkit-scrollbar { width: 6px; }
+        .sidebar::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
+        .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+        .sidebar-brand {
+            padding: 0 25px 20px 25px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 20px;
+        }
+        .nav-section { margin-bottom: 20px; }
+        .nav-section-title {
+            padding: 10px 25px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #64748b;
+            font-weight: 700;
+        }
+        .nav-link {
+            color: #94a3b8;
+            padding: 8px 25px 8px 35px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            font-size: 0.88rem;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: white;
+            background: rgba(255,255,255,0.04);
+        }
+        .nav-link.active { border-left: 3px solid var(--primary-color); }
+        .content-area {
+            padding: 40px 55px;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .page-header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            border-radius: 16px;
+            padding: 40px;
+            color: white;
+            margin-bottom: 40px;
+        }
+        .page-header h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 10px; }
+        .page-header p { color: #94a3b8; font-size: 1.05rem; margin: 0; }
+        .badge-tag {
+            background: rgba(99,102,241,0.15);
+            color: #818cf8;
+            border: 1px solid rgba(99,102,241,0.3);
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-top: 55px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: #e2e8f0;
+        }
+        .method-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 28px 30px;
+            margin-bottom: 26px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            transition: all 0.2s ease;
+        }
+        .method-card:hover {
+            box-shadow: 0 6px 20px rgba(0,0,0,0.07);
+            border-color: #c7d2fe;
+        }
+        .method-name {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-family: 'Consolas', monospace;
+            margin-bottom: 10px;
+        }
+        .method-desc {
+            color: #64748b;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+            line-height: 1.75;
+        }
+        pre {
+            border-radius: 10px !important;
+            background: #0f172a !important;
+            padding: 18px !important;
+            margin-bottom: 0 !important;
+        }
+        code {
+            font-family: 'Consolas', Monaco, monospace !important;
+            font-size: 0.84rem !important;
+        }
+        .info-box {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            border-radius: 0 8px 8px 0;
+            padding: 15px 20px;
+            margin: 20px 0;
+            color: #1e40af;
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+        .warn-box {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            border-radius: 0 8px 8px 0;
+            padding: 15px 20px;
+            margin: 20px 0;
+            color: #92400e;
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+        .success-box {
+            background: #f0fdf4;
+            border-left: 4px solid #22c55e;
+            border-radius: 0 8px 8px 0;
+            padding: 15px 20px;
+            margin: 20px 0;
+            color: #15803d;
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+        .danger-box {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+            border-radius: 0 8px 8px 0;
+            padding: 15px 20px;
+            margin: 20px 0;
+            color: #991b1b;
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+        .method-tag {
+            display: inline-block;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 9px;
+            border-radius: 5px;
+            letter-spacing: 0.5px;
+            margin-right: 8px;
+            text-transform: uppercase;
+        }
+        .tag-get { background: #dcfce7; color: #15803d; }
+        .tag-post { background: #dbeafe; color: #1d4ed8; }
+        .tag-ajax { background: #fef3c7; color: #92400e; }
+        .chain-highlight {
+            background: rgba(99,102,241,0.07);
+            border: 1px solid rgba(99,102,241,0.15);
+            border-radius: 8px;
+            padding: 10px 16px;
+            margin: 12px 0;
+            font-family: monospace;
+            font-size: 0.88rem;
+            color: #4338ca;
+        }
+        .chain-highlight span { color: #e879f9; font-weight: 700; }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+        .summary-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .summary-icon {
+            width: 44px; height: 44px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+        .icon-blue  { background: #dbeafe; color: #1d4ed8; }
+        .icon-green { background: #dcfce7; color: #15803d; }
+        .icon-amber { background: #fef3c7; color: #92400e; }
+        .icon-red   { background: #fee2e2; color: #991b1b; }
+        .icon-purple{ background: #ede9fe; color: #6d28d9; }
+        .icon-indigo{ background: #e0e7ff; color: #3730a3; }
+        .icon-pink  { background: #fce7f3; color: #9d174d; }
+        .summary-card .label { font-size: 0.8rem; color: #64748b; margin-bottom: 2px; }
+        .summary-card .value { font-weight: 700; font-size: 1.05rem; color: #0f172a; }
+        .url-pill {
+            display: inline-block;
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 4px 12px;
+            font-family: monospace;
+            font-size: 0.82rem;
+            color: #475569;
+            margin-bottom: 14px;
+        }
+        .separator { border: none; border-top: 2px dashed #e2e8f0; margin: 35px 0; }
+    </style>
+</head>
+<body>
+<div class="container-fluid p-0">
+    <div class="row g-0">
+
+        <!-- =========== SIDEBAR =========== -->
+        <div class="col-lg-3 sidebar">
+            <div class="sidebar-brand">
+                <i class="fas fa-cubes text-primary"></i> MVC Framework
+            </div>
+            <div class="nav-section">
+                <div class="nav-section-title">Navigation</div>
+                <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Documentation Home</a>
+                <a href="architecture.html" class="nav-link"><i class="fas fa-sitemap"></i> MVC Architecture</a>
+                <a href="core.html" class="nav-link"><i class="fas fa-route"></i> Core Router</a>
+                <a href="controller.html" class="nav-link"><i class="fas fa-gamepad"></i> Controller Class</a>
+                <a href="environment.html" class="nav-link"><i class="fas fa-cog"></i> Environment Config</a>
+                <a href="database.html" class="nav-link"><i class="fas fa-database"></i> Database Class</a>
+                <a href="model.html" class="nav-link"><i class="fas fa-layer-group"></i> Model Class</a>
+                <a href="querybuilder.html" class="nav-link"><i class="fas fa-project-diagram"></i> QueryBuilder</a>
+                <a href="querybuilder-examples.html" class="nav-link active"><i class="fas fa-flask"></i> QB in Practice</a>
+                <a href="helpers.html" class="nav-link"><i class="fas fa-magic"></i> Helper Utilities</a>
+                <a href="datatables.html" class="nav-link"><i class="fas fa-table"></i> DataTables</a>
+            </div>
+            <div class="nav-section">
+                <div class="nav-section-title">On This Page</div>
+                <a href="#overview" class="nav-link"><i class="fas fa-circle-dot" style="font-size:0.6rem"></i> Overview</a>
+                <a href="#index" class="nav-link"><i class="fas fa-circle-dot" style="font-size:0.6rem"></i> index() — List + Count</a>
+                <a href="#store" class="nav-link"><i class="fas fa-circle-dot" style="font-size:0.6rem"></i> store() — Insert</a>
+                <a href="#edit" class="nav-link"><i class="fas fa-circle-dot" style="font-size:0.6rem"></i> edit() — Find One</a>
+                <a href="#update" class="nav-link"><i class="fas fa-circle-dot" style="font-size:0.6rem"></i> update() — Conditional Update</a>
+                <a href="#delete" class="nav-link"><i class="fas fa-circle-dot" style="font-size:0.6rem"></i> delete() — Soft Delete</a>
+                <a href="#toggle" class="nav-link"><i class="fas fa-circle-dot" style="font-size:0.6rem"></i> toggle_status() — Toggle</a>
+                <a href="#search" class="nav-link"><i class="fas fa-circle-dot" style="font-size:0.6rem"></i> search() — whereLike</a>
+                <a href="#change-password" class="nav-link"><i class="fas fa-circle-dot" style="font-size:0.6rem"></i> change_password()</a>
+                <a href="#by-role" class="nav-link"><i class="fas fa-circle-dot" style="font-size:0.6rem"></i> by_role() / by_status()</a>
+                <a href="#bulk-delete" class="nav-link"><i class="fas fa-circle-dot" style="font-size:0.6rem"></i> bulk_delete() — whereIn</a>
+                <a href="#datatables" class="nav-link"><i class="fas fa-circle-dot" style="font-size:0.6rem"></i> get_users_data()</a>
+            </div>
+        </div>
+
+        <!-- =========== CONTENT =========== -->
+        <div class="col-lg-9 content-area">
+
+            <!-- Header -->
+            <div class="page-header" id="overview">
+                <div class="badge-tag"><i class="fas fa-flask"></i> Real-World Examples</div>
+                <h1>QueryBuilder in Practice</h1>
+                <p>A complete walkthrough of a real <code style="color:#a5b4fc">Users</code> controller that demonstrates every major QueryBuilder pattern — select, where, insert, update, soft delete, search, bulk ops, and DataTables integration.</p>
+            </div>
+
+            <!-- Summary Grid -->
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="summary-icon icon-blue"><i class="fas fa-list"></i></div>
+                    <div><div class="label">QB Operations shown</div><div class="value">11 actions</div></div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon icon-green"><i class="fas fa-link"></i></div>
+                    <div><div class="label">Chain methods used</div><div class="value">select, where, whereLike, whereIn, orderBy, first, get, count, insert, update, softDelete</div></div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon icon-purple"><i class="fas fa-shield-halved"></i></div>
+                    <div><div class="label">Security patterns</div><div class="value">Session checks, self-delete guard, duplicate email check</div></div>
+                </div>
+            </div>
+
+            <!-- ==================== SECTION 1: index() ==================== -->
+            <div class="section-title" id="index"><i class="fas fa-list text-primary"></i> 1. index() — List users &amp; count stats</div>
+            <div class="url-pill">GET &nbsp;/users &nbsp;→ &nbsp;Users::index()</div>
+
+            <div class="method-card">
+                <p class="method-desc">Fetches the full user list and three separate aggregate counts (total, active, admin-only) using chained queries. All use <code>where('soft_delete', 1)</code> to exclude deleted records.</p>
+                <pre><code class="language-php">// Load full user list with selected columns, ordered by newest
+$users = $this->mod->table('users')
+    ->select('id, first_name, last_name, email, user_role, user_status, created_at')
+    ->where('soft_delete', 1)
+    ->orderBy('id', 'DESC')
+    ->get();
+
+// Count total active users
+$totalUsers = $this->mod->table('users')
+    ->where('soft_delete', 1)
+    ->count();
+
+// Count only active (user_status = 1) users
+$activeUsers = $this->mod->table('users')
+    ->where('soft_delete', 1)
+    ->where('user_status', 1)
+    ->count();
+
+// Count admins (user_role = 2)
+$adminCount = $this->mod->table('users')
+    ->where('soft_delete', 1)
+    ->where('user_role', 2)
+    ->count();
+
+$this->view('users/index', [
+    'users'       => $users,
+    'totalUsers'  => $totalUsers,
+    'activeUsers' => $activeUsers,
+    'adminCount'  => $adminCount,
+]);</code></pre>
+            </div>
+
+            <div class="info-box">
+                <i class="fas fa-lightbulb me-2"></i>
+                <strong>Why separate count queries?</strong> Chaining <code>count()</code> runs a <code>SELECT COUNT(*)</code> SQL query directly — it's more efficient than loading <code>$users</code> and calling <code>count($users)</code> in PHP, especially for large tables. Each query targets a different WHERE condition, so they must be separate chains.
+            </div>
+
+            <!-- ==================== SECTION 2: store() ==================== -->
+            <div class="section-title" id="store"><i class="fas fa-plus text-primary"></i> 2. store() — Validate &amp; insert new user</div>
+            <div class="url-pill">POST &nbsp;/users/store &nbsp;→ &nbsp;Users::store()</div>
+
+            <div class="method-card">
+                <div class="method-name">Email uniqueness check before insert</div>
+                <p class="method-desc">Before creating the user, check whether the submitted email already exists in the database. This is done with a <code>count()</code> chain — no need to fetch the full row.</p>
+                <pre><code class="language-php">// Check if email already exists (only count — faster than fetching full row)
+$emailExists = $this->mod->table('users')
+    ->where('email', $data['email'])
+    ->count();
+
+if ($emailExists > 0) {
+    $data['email_err'] = 'Email already taken';
+}</code></pre>
+            </div>
+
+            <div class="method-card">
+                <div class="method-name">Insert the new user with insert()</div>
+                <p class="method-desc">After all validation passes, insert the user using the <code>insert()</code> chain. The password is hashed with <code>PASSWORD_BCRYPT</code> before storing. A unique token is generated via <code>Helper::token()</code>.</p>
+                <pre><code class="language-php">$inserted = $this->mod->table('users')->insert([
+    'first_name'  => $data['first_name'],
+    'last_name'   => $data['last_name'],
+    'email'       => $data['email'],
+    'password'    => password_hash($data['password'], PASSWORD_BCRYPT),
+    'user_role'   => $data['user_role'],
+    'user_status' => 1,          // active by default
+    'soft_delete' => 1,          // not deleted
+    'user_token'  => Helper::token(),
+    'admin_id'    => $_SESSION['user_id'],
+    'admin_name'  => $_SESSION['first_name'] . ' ' . $_SESSION['last_name'],
+    'created_at'  => date('Y-m-d H:i:s')
+]);
+
+if ($inserted) {
+    Helper::flash('user_message', 'User created successfully!', 'alert-success');
+    Helper::redirect('users/index');
+}</code></pre>
+            </div>
+
+            <div class="success-box">
+                <i class="fas fa-circle-check me-2"></i>
+                <strong>insert()</strong> returns <code>true</code> on success and <code>false</code> on failure. Always check the return value to provide feedback to the user.
+            </div>
+
+            <!-- ==================== SECTION 3: edit() ==================== -->
+            <div class="section-title" id="edit"><i class="fas fa-pen text-primary"></i> 3. edit() — Fetch a single user by ID</div>
+            <div class="url-pill">GET &nbsp;/users/edit/{id} &nbsp;→ &nbsp;Users::edit($id)</div>
+
+            <div class="method-card">
+                <p class="method-desc">Fetches one specific user object using chained <code>where()</code> filters, then <code>first()</code> to return a single object (not an array). The <code>soft_delete</code> check ensures deleted users cannot be edited.</p>
+                <pre><code class="language-php">// Fetch ONE user matching both conditions — returns an object, not array
+$user = $this->mod->table('users')
+    ->where('id', $id)
+    ->where('soft_delete', 1)
+    ->first();
+
+if (!$user) {
+    // User was deleted or doesn't exist
+    Helper::flash('user_message', 'User not found', 'alert-danger');
+    Helper::redirect('users/index');
+}
+
+// Access properties directly from the returned object:
+echo $user->first_name;  // "John"
+echo $user->email;        // "john@example.com"
+echo $user->user_role;    // 1 or 2</code></pre>
+            </div>
+
+            <div class="info-box">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>first() vs get():</strong> Use <code>first()</code> when you expect exactly one result (by ID, by unique email, etc.). Use <code>get()</code> when fetching multiple rows. <code>first()</code> returns a single <code>stdClass</code> object or <code>null</code>; <code>get()</code> returns an array of objects.
+            </div>
+
+            <!-- ==================== SECTION 4: update() ==================== -->
+            <div class="section-title" id="update"><i class="fas fa-floppy-disk text-primary"></i> 4. update() — Conditional update with save()</div>
+            <div class="url-pill">POST &nbsp;/users/update/{id} &nbsp;→ &nbsp;Users::update($id)</div>
+
+            <div class="method-card">
+                <div class="method-name">Check email uniqueness — but exclude the current user</div>
+                <p class="method-desc">When updating, we need to allow the user to keep their existing email. We exclude the current user's ID using <code>where('id', $id, '!=')</code> — the third argument to <code>where()</code> is the comparison operator.</p>
+                <pre><code class="language-php">// Check email exists — but NOT for this user's own ID
+$emailExists = $this->mod->table('users')
+    ->where('email', $data['email'])
+    ->where('id', $id, '!=')  // ← third param is the operator
+    ->count();
+
+if ($emailExists > 0) {
+    $data['email_err'] = 'Email already taken by another user';
+}</code></pre>
+            </div>
+
+            <div class="method-card">
+                <div class="method-name">Update with where() + update() + save()</div>
+                <p class="method-desc">The update chain works in three steps: <strong>1)</strong> filter with <code>where()</code>, <strong>2)</strong> set new values with <code>update([])</code>, <strong>3)</strong> execute with <code>save()</code>.</p>
+                <pre><code class="language-php">// Step 1: where() → filter the target row
+// Step 2: update([]) → define the new column values
+// Step 3: save() → execute the UPDATE SQL
+$updated = $this->mod->table('users')
+    ->where('id', $id)
+    ->update([
+        'first_name' => $data['first_name'],
+        'last_name'  => $data['last_name'],
+        'email'      => $data['email'],
+        'user_role'  => $data['user_role'],
+        'updated_at' => date('Y-m-d H:i:s')
+    ])
+    ->save();
+
+// $updated = true if rows were affected, false if nothing changed</code></pre>
+            </div>
+
+            <div class="warn-box">
+                <i class="fas fa-triangle-exclamation me-2"></i>
+                <strong>Always include <code>where()</code> before <code>update()</code>.</strong> Without it, the UPDATE will affect every row in the table — a catastrophic mistake. The QueryBuilder does not prevent this automatically.
+            </div>
+
+            <!-- ==================== SECTION 5: delete() ==================== -->
+            <div class="section-title" id="delete"><i class="fas fa-trash text-primary"></i> 5. delete() — Soft delete a single user</div>
+            <div class="url-pill">POST &nbsp;/users/delete/{id} &nbsp;→ &nbsp;Users::delete($id)</div>
+
+            <div class="method-card">
+                <p class="method-desc">A soft delete sets <code>soft_delete = 0</code> on the row — it does NOT run a SQL <code>DELETE</code>. The user's data remains in the database and can be recovered. A self-deletion guard prevents logged-in admins from deleting their own account.</p>
+                <pre><code class="language-php">// Safety guard: admin cannot delete their own account
+if ($id == $_SESSION['user_id']) {
+    Helper::flash('user_message', 'You cannot delete your own account', 'alert-warning');
+    Helper::redirect('users/index');
+}
+
+// Confirm user actually exists before deleting
+$user = $this->mod->table('users')
+    ->where('id', $id)
+    ->where('soft_delete', 1)
+    ->first();
+
+if (!$user) {
+    Helper::flash('user_message', 'User not found', 'alert-danger');
+    Helper::redirect('users/index');
+}
+
+// Soft delete: sets soft_delete = 0 (does NOT run SQL DELETE)
+$deleted = $this->mod->table('users')
+    ->where('id', $id)
+    ->softDelete();
+
+// $deleted = true on success</code></pre>
+            </div>
+
+            <div class="info-box">
+                <i class="fas fa-database me-2"></i>
+                <strong>softDelete() vs hardDelete():</strong> <code>softDelete()</code> runs <code>UPDATE users SET soft_delete = 0 WHERE id = ?</code>. The record stays in the DB and is excluded from future queries that filter <code>where('soft_delete', 1)</code>. A <code>hardDelete()</code> would run a real <code>DELETE FROM users WHERE id = ?</code> — permanent and irreversible.
+            </div>
+
+            <!-- ==================== SECTION 6: toggle_status() ==================== -->
+            <div class="section-title" id="toggle"><i class="fas fa-toggle-on text-primary"></i> 6. toggle_status() — AJAX status toggle</div>
+            <div class="url-pill"><span class="method-tag tag-ajax">AJAX</span>POST &nbsp;/users/toggle_status/{id}</div>
+
+            <div class="method-card">
+                <p class="method-desc">An AJAX endpoint. Fetches only the <code>user_status</code> column (efficient), flips the value (0 ↔ 1), then saves it. Returns a JSON response so the frontend can update the UI without a page reload.</p>
+                <pre><code class="language-php">// Fetch only the status column — no need to load the full row
+$user = $this->mod->table('users')
+    ->select('user_status')        // only fetch what you need
+    ->where('id', $id)
+    ->where('soft_delete', 1)
+    ->first();
+
+if (!$user) {
+    echo json_encode(['success' => false, 'message' => 'User not found']);
+    return;
+}
+
+// Flip the value: 1 → 0, 0 → 1
+$newStatus = $user->user_status == 1 ? 0 : 1;
+
+// Save the toggled value
+$updated = $this->mod->table('users')
+    ->where('id', $id)
+    ->update(['user_status' => $newStatus])
+    ->save();
+
+// Return JSON for the AJAX caller
+echo json_encode([
+    'success'    => true,
+    'message'    => 'Status updated successfully',
+    'new_status' => $newStatus    // frontend uses this to update the UI
+]);</code></pre>
+            </div>
+
+            <div class="success-box">
+                <i class="fas fa-lightbulb me-2"></i>
+                <strong>Tip:</strong> Use <code>select('column1, column2')</code> to fetch only the columns you need. For a toggle, fetching only <code>user_status</code> is far more efficient than loading all 15+ columns of the user row.
+            </div>
+
+            <!-- ==================== SECTION 7: search() ==================== -->
+            <div class="section-title" id="search"><i class="fas fa-magnifying-glass text-primary"></i> 7. search() — whereLike() fuzzy search</div>
+            <div class="url-pill">POST &nbsp;/users/search &nbsp;→ &nbsp;Users::search()</div>
+
+            <div class="method-card">
+                <p class="method-desc"><code>whereLike()</code> generates a <code>LIKE</code> SQL clause. The <code>%</code> wildcard is applied manually around the search term. This example shows a cascading search: first tries first name, then last name, then email as fallbacks.</p>
+                <pre><code class="language-php">$search = trim($_POST['search']); // e.g. "john"
+
+// Step 1: Search by first name
+$users = $this->mod->table('users')
+    ->select('id, first_name, last_name, email, user_role, user_status, created_at')
+    ->where('soft_delete', 1)
+    ->whereLike('first_name', "%{$search}%")  // SQL: first_name LIKE '%john%'
+    ->orderBy('first_name', 'ASC')
+    ->get();
+
+// Step 2: If no results, try last name
+if (empty($users)) {
+    $users = $this->mod->table('users')
+        ->where('soft_delete', 1)
+        ->whereLike('last_name', "%{$search}%") // SQL: last_name LIKE '%john%'
+        ->orderBy('last_name', 'ASC')
+        ->get();
+}
+
+// Step 3: If still nothing, try email
+if (empty($users)) {
+    $users = $this->mod->table('users')
+        ->where('soft_delete', 1)
+        ->whereLike('email', "%{$search}%")    // SQL: email LIKE '%john%'
+        ->orderBy('email', 'ASC')
+        ->get();
+}</code></pre>
+            </div>
+
+            <div class="warn-box">
+                <i class="fas fa-triangle-exclamation me-2"></i>
+                <strong>Performance Note:</strong> <code>LIKE '%value%'</code> with a leading <code>%</code> cannot use a database index and will perform a full table scan. For small tables this is fine; for large datasets, consider a full-text search index.
+            </div>
+
+            <!-- ==================== SECTION 8: change_password() ==================== -->
+            <div class="section-title" id="change-password"><i class="fas fa-key text-primary"></i> 8. change_password() — Update one column</div>
+            <div class="url-pill">POST &nbsp;/users/change_password/{id}</div>
+
+            <div class="method-card">
+                <p class="method-desc">Demonstrates updating a single column. Notice no extra <code>first()</code> check is needed — just validate the input and update directly using the ID from the URL.</p>
+                <pre><code class="language-php">// Validate lengths and match confirmation (shown earlier)...
+
+// Update only the password column — nothing else
+$updated = $this->mod->table('users')
+    ->where('id', $id)
+    ->update([
+        'password' => password_hash($newPassword, PASSWORD_BCRYPT)
+    ])
+    ->save();
+
+if ($updated) {
+    Helper::flash('user_message', 'Password updated successfully!', 'alert-success');
+} else {
+    Helper::flash('user_message', 'Failed to update password', 'alert-danger');
+}
+
+Helper::redirect('users/index');</code></pre>
+            </div>
+
+            <!-- ==================== SECTION 9: by_role / by_status ==================== -->
+            <div class="section-title" id="by-role"><i class="fas fa-filter text-primary"></i> 9. by_role() &amp; by_status() — Multi-condition filters</div>
+
+            <div class="method-card">
+                <div class="method-name">by_role($role) — Filter users by their role</div>
+                <div class="url-pill">GET &nbsp;/users/by_role/2 &nbsp;→ shows all admins</div>
+                <p class="method-desc">Chains two <code>where()</code> conditions: one for active records (<code>soft_delete = 1</code>) and one for the role. Multiple <code>where()</code> calls are joined with AND.</p>
+                <pre><code class="language-php">// GET /users/by_role/2 → shows admins
+// GET /users/by_role/1 → shows regular users
+$users = $this->mod->table('users')
+    ->select('id, first_name, last_name, email, user_role, user_status, created_at')
+    ->where('soft_delete', 1)   // AND
+    ->where('user_role', $role) // AND (multiple where = AND)
+    ->orderBy('first_name', 'ASC')
+    ->get();</code></pre>
+            </div>
+
+            <div class="method-card">
+                <div class="method-name">by_status($status) — Filter by active / inactive</div>
+                <div class="url-pill">GET &nbsp;/users/by_status/0 &nbsp;→ shows inactive users</div>
+                <pre><code class="language-php">// GET /users/by_status/1 → active users
+// GET /users/by_status/0 → inactive users
+$users = $this->mod->table('users')
+    ->select('id, first_name, last_name, email, user_role, user_status, created_at')
+    ->where('soft_delete', 1)
+    ->where('user_status', $status)
+    ->orderBy('created_at', 'DESC')
+    ->get();
+
+$statusName = $status == 1 ? 'Active Users' : 'Inactive Users';</code></pre>
+            </div>
+
+            <div class="info-box">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>Multiple where() = SQL AND.</strong> Every additional <code>->where()</code> call appends an <code>AND</code> to the WHERE clause. So <code>->where('soft_delete', 1)->where('user_role', 2)</code> compiles to <code>WHERE soft_delete = 1 AND user_role = 2</code>.
+            </div>
+
+            <!-- ==================== SECTION 10: bulk_delete() ==================== -->
+            <div class="section-title" id="bulk-delete"><i class="fas fa-layer-group text-primary"></i> 10. bulk_delete() — whereIn() for multi-row operations</div>
+            <div class="url-pill"><span class="method-tag tag-ajax">AJAX</span>POST &nbsp;/users/bulk_delete</div>
+
+            <div class="method-card">
+                <p class="method-desc"><code>whereIn()</code> matches a column against a list of values — equivalent to SQL <code>WHERE id IN (1, 4, 9, 12)</code>. This makes it perfect for bulk operations on a set of selected records from a DataTable.</p>
+                <pre><code class="language-php">// Frontend sends: ids = "[1, 4, 9, 12]" (JSON string from checkboxes)
+$ids = json_decode($_POST['ids'], true); // → [1, 4, 9, 12]
+
+// Guard: prevent admin from bulk-deleting themselves
+if (in_array($_SESSION['user_id'], $ids)) {
+    echo json_encode(['success' => false, 'message' => 'Cannot delete your own account']);
+    return;
+}
+
+// whereIn() → SQL: WHERE id IN (1, 4, 9, 12) — efficient single query
+$deleted = $this->mod->table('users')
+    ->whereIn('id', $ids)   // ← pass an array of IDs
+    ->softDelete();
+
+echo json_encode([
+    'success' => true,
+    'message' => count($ids) . ' users deleted successfully'
+]);</code></pre>
+            </div>
+
+            <div class="success-box">
+                <i class="fas fa-circle-check me-2"></i>
+                <strong>whereIn() is far more efficient than a loop.</strong> One query with <code>WHERE id IN (1,4,9,12)</code> is always faster than running four separate <code>WHERE id = ?</code> queries in a PHP loop. Use it whenever you need to act on a selected set of IDs.
+            </div>
+
+            <!-- ==================== SECTION 11: get_users_data() ==================== -->
+            <div class="section-title" id="datatables"><i class="fas fa-table text-primary"></i> 11. get_users_data() — DataTables SSP with formatters</div>
+            <div class="url-pill"><span class="method-tag tag-get">GET</span>/users/get_users_data</div>
+
+            <div class="method-card">
+                <p class="method-desc">Returns a server-side processed JSON response for jQuery DataTables. The <code>$columns</code> array maps database columns to DataTable column indices (dt). Some columns include <code>formatter</code> closures to transform raw values into HTML badges or action buttons.</p>
+                <pre><code class="language-php">$columns = [
+    // dt: 0 → first_name column (plain text, no formatter)
+    ['db' => 'first_name', 'dt' => 0],
+
+    // dt: 1 → last_name column (plain text)
+    ['db' => 'last_name',  'dt' => 1],
+
+    // dt: 2 → email column (plain text)
+    ['db' => 'email',      'dt' => 2],
+
+    // dt: 3 → user_role — formatter converts 1/2 to HTML badge
+    [
+        'db' => 'user_role', 'dt' => 3,
+        'formatter' => function($d) {
+            return $d == 2
+                ? '&lt;span class="badge bg-success"&gt;Admin&lt;/span&gt;'
+                : '&lt;span class="badge bg-primary"&gt;User&lt;/span&gt;';
+        }
+    ],
+
+    // dt: 4 → user_status — formatter renders icon
+    [
+        'db' => 'user_status', 'dt' => 4,
+        'formatter' => function($d) {
+            return $d == 1
+                ? '&lt;i class="fa fa-check-circle text-success"&gt;&lt;/i&gt;'
+                : '&lt;i class="fa fa-times-circle text-danger"&gt;&lt;/i&gt;';
+        }
+    ],
+
+    // dt: 5 → id — formatter renders Edit + Delete action buttons
+    [
+        'db' => 'id', 'dt' => 5,
+        'formatter' => function($d) {
+            return '
+                &lt;a href="' . URLROOT . '/users/edit/' . $d . '" class="btn btn-sm btn-warning"&gt;
+                    &lt;i class="fa fa-edit"&gt;&lt;/i&gt;
+                &lt;/a&gt;
+                &lt;button class="btn btn-sm btn-danger delete-btn" data-id="' . $d . '"&gt;
+                    &lt;i class="fa fa-trash"&gt;&lt;/i&gt;
+                &lt;/button&gt;
+            ';
+        }
+    ]
+];
+
+// dataTable() handles pagination, search, ordering, and JSON output
+echo $this->mod->dataTable('users', $columns, 'user_role = 1');</code></pre>
+            </div>
+
+            <div class="info-box mb-3">
+                <i class="fas fa-info-circle me-2"></i>
+                The third argument to <code>dataTable()</code> is an optional raw SQL WHERE string (<code>'user_role = 1'</code>) that pre-filters the dataset before DataTables applies its own search and pagination. Use this to scope the table to a specific subset of records.
+            </div>
+
+            <div class="warn-box mb-5">
+                <i class="fas fa-triangle-exclamation me-2"></i>
+                The <strong>id</strong> column should always be the <em>last</em> entry in the <code>$columns</code> array when used for action buttons. This is because DataTables renders columns left-to-right; placing <code>id</code> last ensures it's only used for the actions column without rendering a visible ID number.
+            </div>
+
+        </div><!-- end content -->
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-php.min.js"></script>
+</body>
+</html>

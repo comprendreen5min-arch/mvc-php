@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helper Utilities Reference - Documentation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --dark-color: #1e293b;
+        }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+        }
+        .sidebar {
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            color: #cbd5e1;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow-y: auto;
+            padding: 25px 0;
+            z-index: 100;
+        }
+        .sidebar-brand {
+            padding: 0 25px 20px 25px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 20px;
+        }
+        .nav-section { margin-bottom: 20px; }
+        .nav-section-title {
+            padding: 10px 25px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #64748b;
+            font-weight: 700;
+        }
+        .nav-link {
+            color: #94a3b8;
+            padding: 8px 25px 8px 35px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            font-size: 0.88rem;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .content-area {
+            padding: 40px 50px;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .section-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        .method-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            transition: all 0.2s ease;
+        }
+        .method-card:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+        }
+        .method-name {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-family: monospace;
+            margin-bottom: 8px;
+            border-left: 4px solid var(--primary-color);
+            padding-left: 10px;
+        }
+        .method-detail {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #475569;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+        pre {
+            border-radius: 8px !important;
+            background: #0f172a !important;
+            padding: 16px !important;
+            margin-top: 15px !important;
+        }
+        code {
+            font-family: Consolas, Monaco, monospace !important;
+            font-size: 0.85rem !important;
+        }
+        .demo-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid p-0">
+        <div class="row g-0">
+            <!-- Sidebar -->
+            <div class="col-lg-3 sidebar">
+                <div class="sidebar-brand">
+                    <i class="fas fa-cubes text-primary"></i> MVC Framework
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Navigation</div>
+                    <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Documentation Home</a>
+                    <a href="architecture.html" class="nav-link"><i class="fas fa-sitemap"></i> MVC Architecture</a>
+                    <a href="core.html" class="nav-link"><i class="fas fa-route"></i> Core Router</a>
+                    <a href="controller.html" class="nav-link"><i class="fas fa-gamepad"></i> Controller Class</a>
+                    <a href="environment.html" class="nav-link"><i class="fas fa-cog"></i> Environment Config</a>
+                    <a href="database.html" class="nav-link"><i class="fas fa-database"></i> Database class</a>
+                    <a href="model.html" class="nav-link"><i class="fas fa-layer-group"></i> Model class</a>
+                    <a href="querybuilder.html" class="nav-link"><i class="fas fa-project-diagram"></i> QueryBuilder</a>
+                    <a href="helpers.html" class="nav-link active"><i class="fas fa-magic"></i> Helper Utilities</a>
+                    <a href="datatables.html" class="nav-link"><i class="fas fa-table"></i> DataTables</a>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-lg-9 content-area">
+                <h1 class="section-title">Helper Utilities Reference Manual</h1>
+                <p>Complete breakdown of all methods defined inside <code>app/libraries/Helper.php</code> with interactive code demos.</p>
+
+                <!-- SECTION 1: REDIRECTS -->
+                <h2 class="section-title mt-5"><i class="fas fa-share"></i> 1. Redirection Utilities</h2>
+                
+                <div class="method-card">
+                    <div class="method-name">Helper::redirect($path)</div>
+                    <div class="method-detail">Sends a <code>Location:</code> HTTP redirect header matching the application URL path. Execution terminates immediately.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-php">// Redirect user back to home route
+Helper::redirect('pages/index');</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::redirect_to($path, $to)</div>
+                    <div class="method-detail">Chains redirection parameters (e.g. controller name followed by custom parameters).</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-php">// Redirects to: URLROOT / users / profile
+Helper::redirect_to('users', 'profile');</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::redirect_error($path = 'errors/_404')</div>
+                    <div class="method-detail">Redirects users to the application 404 page routing view.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-php">if (!$recordExists) {
+    Helper::redirect_error();
+}</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::redirect_sessions_error($path = 'errors/sessions_search_error')</div>
+                    <div class="method-detail">Redirects user on session validation queries errors.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-php">Helper::redirect_sessions_error();</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::redirect_permissions($path = 'errors/error')</div>
+                    <div class="method-detail">Redirects users when they perform operations without matching roles credentials.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-php">if ($_SESSION['user_role'] !== 1) {
+    Helper::redirect_permissions();
+}</code></pre>
+                </div>
+
+                <!-- SECTION 2: TOKENS -->
+                <h2 class="section-title mt-5"><i class="fas fa-random"></i> 2. Token & Time Utilities</h2>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::token($length = 20)</div>
+                    <div class="method-detail">Generates a cryptographically secure pseudo-random hex string value (useful for tokens, CSRF protection, password resets).</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-php">$reset_token = Helper::token(40);
+// Returns: '8a2b5e9f1c7d6b3a0e4f8d2c6b9a1e3f5c7d8b9a'</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::random($min, $max)</div>
+                    <div class="method-detail">Returns a random integer value within the defined constraints using mt_rand.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-php">$pin = Helper::random(1000, 9999);</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::random_time()</div>
+                    <div class="method-detail">Wrapper method returning the current server Unix timestamp.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-php">$timestamp = Helper::random_time();</code></pre>
+                </div>
+
+                <!-- SECTION 3: FORM SELECTION -->
+                <h2 class="section-title mt-5"><i class="fas fa-tasks"></i> 3. HTML Forms Toggles</h2>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::is_checked($data)</div>
+                    <div class="method-detail">Evaluates integer value and outputs <code>selected</code> if matching 1. Used inside layout option elements.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-html">&lt;option value="1" &lt;?php echo Helper::is_checked($user-&gt;is_active); ?&gt;&gt;Active&lt;/option&gt;</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::checked($data, $value)</div>
+                    <div class="method-detail">Compares parameters and returns <code>checked</code> if they are equal. Used on checkboxes.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-html">&lt;input type="checkbox" name="roles[]" value="3" &lt;?php echo Helper::checked($user-&gt;role_id, 3); ?&gt;&gt;</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::is_selected($data, $value)</div>
+                    <div class="method-detail">Compares parameters and returns <code>selected</code> if they are equal. Used inside selection lists.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-html">&lt;select name="country"&gt;
+    &lt;option value="MA" &lt;?php echo Helper::is_selected($user-&gt;country, 'MA'); ?&gt;&gt;Morocco&lt;/option&gt;
+&lt;/select&gt;</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::return_date($datetime, $dateformat = 'Y-m-d')</div>
+                    <div class="method-detail">Formats custom database DateTime inputs into clean visual layout strings. Returns null if input is empty.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-php">echo Helper::return_date($user->created_at, 'd M Y');
+// Outputs: "30 Jun 2026"</code></pre>
+                </div>
+
+                <!-- SECTION 4: FILE HANDLING -->
+                <h2 class="section-title mt-5"><i class="fas fa-file-upload"></i> 4. Upload Files & Empty Handlers</h2>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::file_handle($file_name)</div>
+                    <div class="method-detail">Processes single uploads. Replaces non-alphanumeric chars from file prefix with hyphens and resolves file structure mapping array.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-php">$file = $this->help->file_handle('avatar');
+if ($file) {
+    move_uploaded_file($file['file_temp'], 'uploads/' . $file['file_name']);
+}</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::files_handle($file_name)</div>
+                    <div class="method-detail">Processes multiple arrays of file uploads, yielding an array list containing name mappings and temporary locations.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-php">$files = $this->help->files_handle('gallery_images');
+foreach ($files as $file) {
+    move_uploaded_file($file['file_temp'], 'uploads/gallery/' . $file['file_name']);
+}</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::file_handle_empty($destination_folder, $new_file_name, $default_image = 'default_image.jpg')</div>
+                    <div class="method-detail">Checks upload destination path, and copies a fallback placeholder image into that folder if empty.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-php">// Copies standard default avatar to user directory
+Helper::file_handle_empty('avatars/', 'user_5_avatar.jpg', 'placeholder.jpg');</code></pre>
+                </div>
+
+                <!-- SECTION 5: FLASH ALERT MESSAGES -->
+                <h2 class="section-title mt-5"><i class="fas fa-bell"></i> 5. Flash Alerts System</h2>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::flash($name, $message = '', $class = '')</div>
+                    <div class="method-detail">Saves key-value message blocks inside session cookies. Supports custom CSS styles (e.g. <code>alert-success</code>). Also accepts predefined alert methods dynamically.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-php">// Set custom alert message
+Helper::flash('profile_msg', 'Settings updated!', 'alert-success');
+
+// Use predefined warning alert
+Helper::flash('warning');</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::flash_message($name = 'message')</div>
+                    <div class="method-detail">Echos the visual alert block to layout and purges it from session/cookie variables.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-html">&lt;div class="alerts-container"&gt;
+    &lt;?php Helper::flash_message('profile_msg'); ?&gt;
+&lt;/div&gt;</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Predefined alert methods: success() / danger() / warning() / info()</div>
+                    <div class="method-detail">Outputs predefined message structures for quick status processing checks.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-php">// Equivalent to Helper::flash('warning')
+Helper::flash('warning');</code></pre>
+                </div>
+
+                <!-- SECTION 6: URL & LAYOUTS -->
+                <h2 class="section-title mt-5"><i class="fas fa-layer-group"></i> 6. Layout & Route Elements</h2>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::breadcrumb_url()</div>
+                    <div class="method-detail">Formats active navigation levels into HTML breadcrumbs. Parses controller, actions routing params automatically.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-html">&lt;ul class="breadcrumb"&gt;
+    &lt;?php Helper::breadcrumb_url(); ?&gt;
+&lt;/ul&gt;</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::renderMenuItem($title, $icon, $url, $subItems, $allowedRoles)</div>
+                    <div class="method-detail">Prints HTML template codes for sidebar navigation, reviewing active session role authorization rules.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-php">// Render menu links ONLY for role 1 (Admin)
+echo Helper::renderMenuItem('Settings', 'fa fa-cog', URLROOT.'/settings', [], [1]);</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::status($status_value)</div>
+                    <div class="method-detail">Returns HTML icon blocks matching active integer state (value 1 shows check circle, value 0 shows pause circle).</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-php">echo Helper::status($user->user_status);</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::slugify($text)</div>
+                    <div class="method-detail">Replaces special formatting characters and symbols from custom texts with hyphens to make clean URL strings.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-php">echo Helper::slugify('Hot Air Balloon CRM #5!');
+// Outputs: "hot-air-balloon-crm-5"</code></pre>
+                </div>
+
+                <!-- SECTION 7: CRYPTO -->
+                <h2 class="section-title mt-5"><i class="fas fa-key"></i> 7. Cryptography & Formatting</h2>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::encrypt($data) / Helper::decrypt($data)</div>
+                    <div class="method-detail">Performs AES-256-CBC encryption using secret keys defined inside application helpers.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-php">$encrypted = Helper::encrypt('my_smtp_password');
+$decrypted = Helper::decrypt($encrypted);</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::number_to_text($number, $lang = 'fr_FR')</div>
+                    <div class="method-detail">Converts decimal numeric parameters into spelled out letters utilizing spellout algorithms.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-php">echo Helper::number_to_text(2500, 'en_US');
+// Outputs: "two thousand five hundred"</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::truncate(string $text, int $limit = 100, string $end = '...')</div>
+                    <div class="method-detail">Trims down strings length to specified character constraints, appending custom trail indicators.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-php">echo Helper::truncate('This is a very long string description sample', 15);
+// Outputs: "This is a very ..."</code></pre>
+                </div>
+
+                <!-- SECTION 8: SANITIZATION -->
+                <h2 class="section-title mt-5"><i class="fas fa-shield-alt"></i> 8. Field Inputs Sanitization & Filters</h2>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::text(string $field, $source = INPUT_POST)</div>
+                    <div class="method-detail">Filters input fields, converting tags to prevent cross site scripting injection issues.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-php">$first_name = Helper::text('first_name');</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::email(string $field, $source = INPUT_POST)</div>
+                    <div class="method-detail">Validates email address formatting and clears illegal parameters.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-php">$email = Helper::email('email');</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::int(string $field, $source = INPUT_POST)</div>
+                    <div class="method-detail">Returns value as valid integer, returning null if empty or invalid.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-php">$age = Helper::int('age');</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::float(string $field, $source = INPUT_POST)</div>
+                    <div class="method-detail">Validates and filters decimal inputs parameters.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-php">$price = Helper::float('price');</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::url(string $field, $source = INPUT_POST)</div>
+                    <div class="method-detail">Validates and sanitizes standard URL string formats.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-php">$website = Helper::url('website');</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::bool(string $field, $source = INPUT_POST)</div>
+                    <div class="method-detail">Evaluates parameters and checks standard boolean triggers.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-php">$agree = Helper::bool('agree_terms');</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::raw(string $field, $source = INPUT_POST)</div>
+                    <div class="method-detail">Retrieves the unprocessed value of a field without filtering. Use carefully.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-php">$raw_payload = Helper::raw('webhook_data');</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::html_special_chars(string $field, $source = INPUT_POST)</div>
+                    <div class="method-detail">Sanitizes rich parameters, converting characters like quotes or brackets to safe HTML entities.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-php">$description = Helper::html_special_chars('product_description');</code></pre>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-name">Helper::html_special_chars_decode(string $field)</div>
+                    <div class="method-detail">Translates compiled HTML special entities back to raw HTML codes. Use when rendering layouts.</div>
+                    <div class="demo-title">Demo Example</div>
+                    <pre><code class="language-php">echo Helper::html_special_chars_decode($product->description);</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

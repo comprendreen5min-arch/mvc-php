@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDO Database Wrapper - Documentation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --dark-color: #1e293b;
+        }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+        }
+        .sidebar {
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            color: #cbd5e1;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow-y: auto;
+            padding: 25px 0;
+        }
+        .sidebar-brand {
+            padding: 0 25px 20px 25px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 20px;
+        }
+        .nav-section { margin-bottom: 20px; }
+        .nav-section-title {
+            padding: 10px 25px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #64748b;
+            font-weight: 700;
+        }
+        .nav-link {
+            color: #94a3b8;
+            padding: 8px 25px 8px 35px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            font-size: 0.88rem;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .content-area {
+            padding: 40px 50px;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .section-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        pre {
+            border-radius: 8px !important;
+            background: #0f172a !important;
+            padding: 16px !important;
+        }
+        code {
+            font-family: Consolas, Monaco, monospace !important;
+            font-size: 0.85rem !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid p-0">
+        <div class="row g-0">
+            <!-- Sidebar -->
+            <div class="col-lg-3 sidebar">
+                <div class="sidebar-brand">
+                    <i class="fas fa-cubes text-primary"></i> MVC Framework
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Navigation</div>
+                    <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Documentation Home</a>
+                    <a href="architecture.html" class="nav-link"><i class="fas fa-sitemap"></i> MVC Architecture</a>
+                    <a href="database.html" class="nav-link active"><i class="fas fa-database"></i> Database class</a>
+                    <a href="model.html" class="nav-link"><i class="fas fa-cubes"></i> Model class</a>
+                    <a href="querybuilder.html" class="nav-link"><i class="fas fa-project-diagram"></i> QueryBuilder</a>
+                    <a href="helpers.html" class="nav-link"><i class="fas fa-magic"></i> Helper Utilities</a>
+                    <a href="datatables.html" class="nav-link"><i class="fas fa-table"></i> DataTables</a>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col-lg-9 content-area">
+                <h1 class="section-title">Database Wrapper (PDO Class)</h1>
+                <p>Learn how to use raw SQL statement operations safely using the custom Database wrapper class.</p>
+
+                <h3 class="mt-4">1. Initializing inside a Model</h3>
+                <p>The base Model automatically instantiates the Database class wrapper in the constructor, which is then accessible via <code>$this->db</code>.</p>
+                <pre><code class="language-php">class UserModel extends Model {
+    public function getUser($id) {
+        $this->db->query("SELECT * FROM users WHERE id = :id");
+        $this->db->bind(':id', $id);
+        return $this->db->single();
+    }
+}</code></pre>
+
+                <h3 class="mt-5">2. Preparing & Binding Parameters</h3>
+                <p>Always bind your parameters using the <code>bind()</code> function. This prevents SQL injection attacks by ensuring the values are properly parameterized.</p>
+                <pre><code class="language-php">$this->db->query("SELECT * FROM users WHERE email = :email AND status = :status");
+$this->db->bind(':email', $email, PDO::PARAM_STR);
+$this->db->bind(':status', 1, PDO::PARAM_INT);</code></pre>
+
+                <h3 class="mt-5">3. Fetching Results</h3>
+                <p>There are multiple ways to retrieve your results based on the number of expected columns or rows:</p>
+                
+                <h5 class="mt-4">A. Multiple Rows (resultSet)</h5>
+                <p>Returns an array of row objects.</p>
+                <pre><code class="language-php">$results = $this->db->resultSet();
+foreach($results as $row) {
+    echo $row->first_name;
+}</code></pre>
+
+                <h5 class="mt-4">B. Single Row (single)</h5>
+                <p>Returns a single row object.</p>
+                <pre><code class="language-php">$user = $this->db->single();
+echo $user->email;</code></pre>
+
+                <h5 class="mt-4">C. Row Count (rowCount)</h5>
+                <p>Returns the number of affected rows of the last query.</p>
+                <pre><code class="language-php">$count = $this->db->rowCount();</code></pre>
+
+                <h3 class="mt-5">4. Query Transactions</h3>
+                <p>You can use standard transactions to ensure multiple queries complete successfully together, rolling back changes if any query encounters an error:</p>
+                <pre><code class="language-php">try {
+    $this->db->beginTransaction();
+
+    $this->db->query("INSERT INTO bookings (customer_id) VALUES (:id)");
+    $this->db->bind(':id', $customerId);
+    $this->db->execute();
+
+    $this->db->query("UPDATE accounts SET balance = balance - :amount WHERE id = :id");
+    $this->db->bind(':amount', 500);
+    $this->db->bind(':id', $customerId);
+    $this->db->execute();
+
+    $this->db->commit();
+} catch (PDOException $e) {
+    $this->db->rollBack();
+    // Handle error...
+}</code></pre>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
