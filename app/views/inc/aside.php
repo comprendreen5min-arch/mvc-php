@@ -17,6 +17,14 @@
                     print '<hr>';
 
 
+                                
+                   
+                    // Users: Managers (2) only
+                    print Helper::renderMenuItem('Manager', 'fa fa-users', 'javascript:void(0);', [
+                        ['title' => 'Managers', 'url' => URLROOT . '/managers/index']
+                    ], [1,2]);
+
+
                    
 
 
@@ -25,6 +33,12 @@
                     // Users: Admin (1) only
                     print Helper::renderMenuItem('Users', 'ti-user', 'javascript:void(0);', [
                         ['title' => 'Users', 'url' => URLROOT . '/users/index']
+                    ], [1]);
+
+
+                            // Users: Admin (1) only
+                    print Helper::renderMenuItem('Settings', 'fas fa-cog', 'javascript:void(0);', [
+                        ['title' => 'Settings', 'url' => URLROOT . '/settings/index']
                     ], [1]);
 
 

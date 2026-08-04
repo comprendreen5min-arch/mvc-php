@@ -1,6 +1,6 @@
 // Global Configuration Object
 const jsConfig = {
-    URLROOT: window.URLROOT || (window.location.origin + '/' + (window.location.pathname.split('/')[1] || 'mvc-php')),
+    URLROOT: window.URLROOT || (window.location.origin + '/' + (window.location.pathname.split('/')[1] || 'ecommerce_app')),
     APPNAME: "MVC PHP",
     
     // Upload Paths

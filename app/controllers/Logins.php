@@ -32,6 +32,8 @@ class Logins extends Controller {
     {
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
+       
+
         // Validate input
         $email = trim($_POST['email'] ?? '');
         $password = trim($_POST['password'] ?? '');
@@ -52,7 +54,7 @@ class Logins extends Controller {
 
         // Check if account is locked BEFORE attempting login
         if ($userId && $this->mod->checkAccountLocked($userId)) {
-            Helper::flash('login_message', 'Your account has been temporarily locked due to multiple failed login attempts. Please try again in 15 minutes.', 'alert-danger');
+            Helper::flash('login_message', 'Your account has been temporarily locked due to multiple failed login attempts. Please try again in 1 minute.', 'alert-danger');
             Helper::redirect('logins/index');
         }
 
@@ -254,8 +256,16 @@ class Logins extends Controller {
     }
 
 
-
-
-
-    
 }
+
+
+
+
+
+
+
+
+
+
+
+

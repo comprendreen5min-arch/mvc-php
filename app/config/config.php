@@ -21,7 +21,7 @@ define('BACKUP_MASTER_HASH', getenv('BACKUP_MASTER_HASH'));
 
 define('APPROOT', dirname(dirname(__FILE__)));
 define('DOCROOT', dirname(dirname(dirname(__FILE__))));
-define('URLROOT', 'http://localhost/mvc-php');
+define('URLROOT', 'http://localhost:8888/ecommerce_app');
 define('SITENAME', 'MVC PHP 1.0.0');
 
 
