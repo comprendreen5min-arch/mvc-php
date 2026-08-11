@@ -3,6 +3,9 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
+            {{Helper::flash_message('settings_message')}}
+            {{Helper::flash_message('bank_message')}}
+            {{Helper::flash_message('company_message')}}
                                     <div class="card-body">
 
                                         <!-- Nav tabs -->
@@ -45,7 +48,7 @@
                                                             <div class="row mb-3">
                                                                     <label for="app-name-input" class="col-sm-2 col-form-label">App Name</label>
                                                             <div class="col-sm-10">
-                                                                 <input class="form-control" type="text" placeholder="" name="app_name" id="app-name-input">
+                                                                 <input class="form-control" type="text" placeholder="" name="app_name" id="app-name-input" value="{{$data['app_settings']->app_name}}">
                                                             </div>
                                                             </div>
 
@@ -53,7 +56,7 @@
                                                               <div class="row mb-3">
                                                                     <label for="app-desc-input" class="col-sm-2 col-form-label">Description</label>
                                                             <div class="col-sm-10">
-                                                                 <input class="form-control" type="text" placeholder="" name="app_description" id="app-desc-input">
+                                                                 <input class="form-control" type="text" placeholder="" name="app_description" id="app-desc-input" value="{{$data['app_settings']->app_description}}">
                                                             </div>
                                                             </div>
                                                             
@@ -73,13 +76,210 @@
 
                                                 </form>
                                               
-                                        
+                                                
                                            
                                             </div>
+
                                             <div class="tab-pane p-3" id="company-info" role="tabpanel">
-                                              
+                                            
+
+                                            <form action="{{URLROOT}}/settings/company_info" method="POST">
+
+                                            
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                            <div class="row mb-3">
+                                                                    <label for="cmp_name" class="col-form-label">Company Name</label>
+                                                                    <div class="col-sm-10">
+                                                                          <input class="form-control" type="text" placeholder="" name="company_name" 
+                                                                          id="cmp_name" value="{{$data['company_info']->company_name}}">
+                                                                    </div>
+                                                            </div>
+                                                </div>
+                                                
+                                                <div class="col-md-6">
+                                                            <div class="row mb-3">
+                                                                    <label for="cmp_type" class="col-form-label">Company Type</label>
+                                                                    <div class="col-sm-10">
+                                                                          <input class="form-control" type="text"  name="company-type" 
+                                                                          id="cmp_type" value="{{$data['company_info']->company_type}}" placeholder="SARL,LLC,LTD...">
+                                                                    </div>
+                                                            </div>
+                                                                                               
+                                                </div>
+                                            </div> <!-- end row -->
+
+
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                            <div class="row mb-4">
+                                                                    <label for="cmp_email" class="col-form-label">Company Email</label>
+                                                                    <div class="col-sm-10">
+                                                                          <input class="form-control" type="email" placeholder="example@email.com" name="company_email" 
+                                                                          id="cmp_email" value="{{$data['company_info']->company_email}}">
+                                                                    </div>
+                                                            </div>
+                                                </div>
+                                                
+                                                <div class="col-md-4">
+                                                            <div class="row mb-4">
+                                                                    <label for="cmp_phone" class="col-form-label">Company Phone</label>
+                                                                    <div class="col-sm-10">
+                                                                          <input class="form-control" type="text"  name="company-phone" 
+                                                                          id="cmp_phone" value="{{$data['company_info']->company_phone}}" placeholder="+212 666 777 999">
+                                                                    </div>
+                                                            </div>
+                                                </div>                                                  
+                                                
+                                                <div class="col-md-4">
+                                                            <div class="row mb-4">
+                                                                    <label for="cmp_address" class="col-form-label">Company Address</label>
+                                                                    <div class="col-sm-10">
+                                                                          <input class="form-control" type="text"  name="company-address" 
+                                                                          id="cmp_address" value="{{$data['company_info']->company_address}}" placeholder="cite massira,Marrakech">
+                                                                    </div>
+                                                            </div>
+                                                </div>     
+                                            </div> <!-- end row -->
+
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                            <div class="row mb-3">
+                                                                    <label for="cmp_city" class="col-form-label">City</label>
+                                                                    <div class="col-sm-10">
+                                                                          <input class="form-control" type="text" placeholder="Marrakech" name="company_city" 
+                                                                          id="cmp_city" value="{{$data['company_info']->company_city}}">
+                                                                    </div>
+                                                            </div>
+                                                </div>
+                                                
+                                                <div class="col-md-6">
+                                                            <div class="row mb-3">
+                                                                    <label for="cmp_country" class="col-form-label">Country</label>
+                                                                    <div class="col-sm-10">
+                                                                          <input class="form-control" type="text"  name="company-country" 
+                                                                          id="cmp_country" value="{{$data['company_info']->company_country}}" placeholder="Morocco">
+                                                                    </div>
+                                                            </div>
+                                                                                               
+                                                </div>
+                                            </div> <!-- end row -->
+
+
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                            <div class="row mb-4">
+                                                                    <label for="cmp_if" class="col-form-label">Company IF</label>
+                                                                    <div class="col-sm-10">
+                                                                          <input class="form-control" type="text" name="company_if" 
+                                                                          id="cmp_if" value="{{$data['company_info']->company_if}}">
+                                                                    </div>
+                                                            </div>
+                                                </div>
+                                                
+                                                <div class="col-md-4">
+                                                            <div class="row mb-4">
+                                                                    <label for="cmp_cnss" class="col-form-label">Company Cnss</label>
+                                                                    <div class="col-sm-10">
+                                                                          <input class="form-control" type="text"  name="company-cnss" 
+                                                                          id="cmp_cnss" value="{{$data['company_info']->company_cnss}}">
+                                                                    </div>
+                                                            </div>
+                                                </div>                                                  
+                                                
+                                                <div class="col-md-4">
+                                                            <div class="row mb-4">
+                                                                    <label for="cmp_rc" class="col-form-label">Company RC</label>
+                                                                    <div class="col-sm-10">
+                                                                          <input class="form-control" type="text"  name="company-rc" 
+                                                                          id="cmp_rc" value="{{$data['company_info']->company_rc}}">
+                                                                    </div>
+                                                            </div>
+                                                </div>     
+                                            </div> <!-- end row -->
+
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                            <div class="row mb-3">
+                                                                    <label for="cmp_patente" class="col-form-label">Company Patente</label>
+                                                                    <div class="col-sm-10">
+                                                                          <input class="form-control" type="text" name="company_patente" 
+                                                                          id="cmp_patente" value="{{$data['company_info']->company_patente}}">
+                                                                    </div>
+                                                            </div>
+                                                </div>
+                                                
+                                                <div class="col-md-6">
+                                                            <div class="row mb-3">
+                                                                    <label for="cmp_ice" class="col-form-label">Company ICE</label>
+                                                                    <div class="col-sm-10">
+                                                                          <input class="form-control" type="text"  name="company-ice" 
+                                                                          id="cmp_ice" value="{{$data['company_info']->company_ice}}" >
+                                                                    </div>
+                                                            </div>
+                                                                                               
+                                                </div>
+                                            </div> <!-- end row -->
+
+                                            
+                                            <div class="card">
+                                                <div class="card-body"></div>
+                                                <div class="card-footer d-flex justify-content-end">
+                                                    <button class="btn btn-sm btn-primary" type="submit">Save</button>
+                                                </div>
                                             </div>
+                                            </form>
+                                            </div>
+
+                                                  
                                             <div class="tab-pane p-3" id="bank-info" role="tabpanel">
+                                               <form action="{{URLROOT}}/settings/app_bank" method="POST">
+                                                <div class="card">
+                                                    
+                                                    <div class="card-body">
+
+                                                            <!-- <div class="form-group">
+                                                                <label for="">App name </label>
+                                                                <input type="text" class="form-control" name="app_name" require>
+
+                                                            </div> -->
+                                                            <div class="row mb-3">
+                                                                    <label for="app-name-input" class="col-sm-2 col-form-label">Account Holder</label>
+                                                                    <div class="col-sm-10">
+                                                                          <input class="form-control" type="text" placeholder="" name="account_holder" id="app-name-input" value="{{$data['bank_info']->account_holder}}">
+                                                                    </div>
+                                                            </div>
+
+
+                                                              <div class="row mb-3">
+                                                                    <label for="bank_name" class="col-sm-2 col-form-label">Bank Name</label>
+                                                            <div class="col-sm-10">
+                                                                 <input class="form-control" type="text" placeholder="" name="bank_name" id="bank_name" value="{{$data['bank_info']->bank_name}}">
+                                                            </div>
+                                                            </div>
+            
+
+                                                              <div class="row mb-3">
+                                                                    <label for="bank_acc" class="col-sm-2 col-form-label">Bank account</label>
+                                                            <div class="col-sm-10">
+                                                                 <input class="form-control" type="text" placeholder="" name="bank_account" id="bank_acc" maxlength="24" value="{{$data['bank_info']->bank_account}}">
+                                                            </div>
+                                                            </div>
+
+                                                        
+                                                    </div>
+                                                    <div class="card-footer d-flex justify-content-end">
+                                                        <button type="submit" class="btn btn-primary">Update</button>
+                                                    </div>
+
+                                               
+                                                </div>
+                                                
+
+                                                </form>
                                                
                                             </div>
                                             <div class="tab-pane p-3" id="smtp" role="tabpanel">
