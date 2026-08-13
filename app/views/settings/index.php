@@ -6,6 +6,7 @@
             {{Helper::flash_message('settings_message')}}
             {{Helper::flash_message('bank_message')}}
             {{Helper::flash_message('company_message')}}
+            {{Helper::flash_message('smtp_message')}}
                                     <div class="card-body">
 
                                         <!-- Nav tabs -->
@@ -283,7 +284,73 @@
                                                
                                             </div>
                                             <div class="tab-pane p-3" id="smtp" role="tabpanel">
-                                               
+                                                  
+                                                <form action="{{URLROOT}}/settings/smtp" method="POST">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="row mb-3">
+                                                                    <label for="smtp_user" class="col-sm-2 col-form-label">Usename</label>
+                                                            <div class="col-sm-10">
+                                                                 <input class="form-control" type="text" placeholder="" name="smtp_username" 
+                                                                 id="smtp_user" value="{{$data['app_smtp']->smtp_username}}">
+                                                            </div>
+                                                            </div>
+
+
+                                                              <div class="row mb-3">
+                                                                    <label for="smtp_password" class="col-sm-2 col-form-label">Password</label>
+                                                            <div class="col-sm-10">
+                                                                 <input class="form-control" type="password" placeholder="" name="smtp_password" 
+                                                                 id="smtp_password" value="">
+                                                                 <label for="">Leave it blank to use existing password</label>
+                                                            </div>
+                                                            </div>
+
+
+                                                              <div class="row mb-3">
+                                                                    <label for="smtp_host" class="col-sm-2 col-form-label">Host</label>
+                                                            <div class="col-sm-10">
+                                                                 <input class="form-control" type="text" placeholder="" name="smtp_host" 
+                                                                 id="smtp_host" value="{{$data['app_smtp']->smtp_host}}">
+                                                            </div>
+                                                            </div>
+
+
+                                                              <div class="row mb-3">
+                                                                    <label for="smtp_port" class="col-sm-2 col-form-label">Port</label>
+                                                            <div class="col-sm-10">
+                                                                 <input class="form-control" type="text" placeholder="" name="smtp_port" 
+                                                                 id="smtp_port" value="{{$data['app_smtp']->smtp_port}}">
+                                                            </div>
+                                                            </div>
+                                                            
+
+                                                              <div class="row mb-3">
+                                                                    <label for="smtp_encryption" class="col-sm-2 col-form-label">Encryption</label>
+                                                            <div class="col-sm-10">
+                                                                 <select class="form-control" type="text" placeholder="" name="smtp_encryption" 
+                                                                    id="smtp_encryption" value="{{$data['app_smtp']->smtp_encryption}}">
+                                                                    <option value="ssl">SSL</option>
+                                                                    <option value="tls">TLS</option>
+                                                                    
+
+
+                                                                 </select>
+                                                            </div>
+                                                            </div>                                                          
+
+                                                        </div>
+                                                        <div class="card-footer">
+                                                            <div class="card-footer d-flex justify-content-end">
+                                                                <button type="submit" class="btn btn-primary">Update</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                </form>
+                                            
+                                                
                                             </div>
                                         </div>
 

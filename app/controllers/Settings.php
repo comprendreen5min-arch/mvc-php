@@ -27,13 +27,15 @@ class Settings extends Controller{
         $appSettings = $this->mod->getAppSettings();
         $bankInfo = $this->mod->getBankInfo();
         $companyInfo = $this->mod->getCompanyInfo();
+        $smtpInfo = $this->mod->getSmtpInfo();
  
 
         $data = [
             "URLROOT" => URLROOT,
             "app_settings" => $appSettings,
             'bank_info' => $bankInfo,
-            'company_info' => $companyInfo
+            'company_info' => $companyInfo,
+            'app_smtp' => $stmpInfo
 
         ];
 
@@ -111,7 +113,7 @@ class Settings extends Controller{
 
   public function company_info(){
         if(REQUEST !== 'POST'){
-            Helper::flash('settings_message' , 'Invalid Request' , 'alert-danger');
+            Helper::flash('company_message' , 'Invalid Request' , 'alert-danger');
             Helper::redirect('settings/index');
 
          }
@@ -120,7 +122,7 @@ class Settings extends Controller{
         $data = [
             'company_name' => trim($_POST['company_name']),
             'company_type' => trim($_POST['company_type']),
-            'company_address' => trim($_POST['company_adress']),
+            'company_address' => trim($_POST['company_address']),
             'company_email' => trim($_POST['company_email']), 
             'company_phone' => trim($_POST['company_phone']), 
             'company_city' => trim($_POST['company_city']), 
@@ -145,9 +147,50 @@ class Settings extends Controller{
         }
 
 
-        
 
-      
+  }
+
+
+
+  public function smtp(){
+    if(REQUEST !== 'POST'){
+        Helper::flash('smtp_message' , 'Invalid Request' , 'alert-danger');
+        Helper::redirect('settings/index');
+
+    }
+    $password = trim($_POST['smtp_password']);
+    $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    if(empty(trim($password))){
+        $currentSMTP = $this->mod->table('app_smtp')->where('id',1)->first();
+        $password = Helper::decrypt($currentSMTP->smtp_password);
+
+    }
+
+        $data = [
+            'smtp_username' => trim($_POST['smtp_username']),
+            'smtp_port' => trim($_POST['smtp_port']),
+            'smtp_host' => trim($_POST['smtp_host']),
+            'smtp_encryption' => trim($_POST['smtp_encryption']), 
+            'smtp_password' => Helper::encrypt(trim($password)), 
+            'admin_id' => $this->admin_id,
+            'admin_name' => $this->adminName
+
+
+        ];
+
+        if($this->mod->updateSmtpInfo($data)){
+            Helper::flash('smtp_message', 'Smtp Info updated successfully','alert-success');
+            Helper::redirect('settings/index');            
+
+        }else{
+            Helper::flash('smtp_message', 'Smtp Info updated failed','alert-danger');
+            Helper::redirect('settings/index');            
+        }
+
+
+
+
+
 
   }
 

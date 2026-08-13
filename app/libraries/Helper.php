@@ -297,7 +297,7 @@ class Helper
 
     /* ================= ENCRYPTION ================= */
 
-    private static $secret_key = 'Booklix_Secret_Key_For_Encryption_987654321';
+    private static $secret_key = 'MVC_Secret_Key_For_Encryption_987654321';
     private static $encryption_method = "AES-256-CBC";
 
     public static function encrypt($data)

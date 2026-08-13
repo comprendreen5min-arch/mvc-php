@@ -17,6 +17,13 @@
                     print '<hr>';
 
 
+                    // Users: Managers (2) only
+                    print Helper::renderMenuItem('Products', 'fab fa-product-hunt', 'javascript:void(0);', [
+                        ['title' => 'New Product', 'url' => URLROOT . '/products/new'],
+                        ['title' => 'Products List', 'url' => URLROOT . '/products/index']
+                    ], [1]);
+
+
                                 
                    
                     // Users: Managers (2) only

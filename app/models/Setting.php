@@ -74,7 +74,7 @@ class Setting extends Model{
                          ->update([
                             'company_name' => $_data['company_name'],
                             'company_type' => $_data['company_type'],
-                            'company_address' => $_data['company_adress'],
+                            'company_address' => $_data['company_address'],
                             'company_email' => $_data['company_email'], 
                             'company_phone' => $_data['company_phone'], 
                             'company_city' => $_data['company_city'], 
@@ -104,6 +104,38 @@ class Setting extends Model{
         return $company;
 
 
+    }
+
+    public function getSmtpInfo(){
+        $smtpInfo = $this->table('app_smtp')
+                      ->where('id',1)
+                      ->first();
+    
+        return $smtpInfo;
+
+
+    }
+
+
+    public function updateSmtpInfo($data){
+
+         $smtp_info = $this->table('app_smtp')
+                         ->where('id',1)
+                         ->update([
+                            'smtp_username' => $_data['smtp_username'],
+                            'smtp_port' => $_data['smtp_port'],
+                            'smtp_host' => $_data['smtp_host'],
+                            'smtp_encryption' => $_data['smtp_encryption'], 
+                            'smtp_password' => $_data['company_phone'], 
+                            'admin_id' => $_data['admin_id'], 
+                            'admin_name' => $_data['admin_name']
+
+
+                         ])
+                         ->save();
+        
+        return $smtp_info;
+
 
     }
 
@@ -113,6 +145,5 @@ class Setting extends Model{
 
 
 
-
-
+    
 }
